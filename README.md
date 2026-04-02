@@ -73,3 +73,5 @@ For more details, see [enhancements_ideas.md](enhancements_ideas.md).
 
 ## ⚖️ License
 MIT
+
+Subscribe to Our Newsletter: [Agicademia Dispatch](agicademia-newsletter-vaibhav-sa30s-projects.vercel.app)
