@@ -1,0 +1,267 @@
+policy_name: "EU Artificial Intelligence Act"
+version: "Regulation (EU) 2024/1689"
+description: "Comprehensive hierarchical policy-to-code mapping for high-risk AI system obligations under the EU AI Act."
+
+regulatory_sections:
+  - section_id: "Article 9"
+    title: "Risk management system"
+    metadata:
+      citation: "REGULATION (EU) 2024/1689 Article 9"
+      effective_date: "2024-08-01"
+    definitions:
+      - term: "risk management system"
+        context: "A systematic process involving risk identification, estimation, evaluation, and control measures throughout the AI system lifecycle."
+      - term: "high-risk AI systems"
+        context: "AI systems specifically categorized in Annex III that pose significant risks to health, safety, or fundamental rights."
+    rules:
+      - rule_id: "ART9-1"
+        label: "Risk Management System Establishment"
+        type: "obligation"
+        action: "Establish, document, implement, and maintain a risk management system for high-risk AI systems."
+        target: "Provider"
+        evaluator: "risk_management_system_check"
+        threshold: 0.85
+      - rule_id: "ART9-2"
+        label: "Risk Identification and Estimation"
+        type: "obligation"
+        action: "Identify and analyze known and foreseeable risks associated with the high-risk AI system throughout its lifecycle."
+        target: "Provider"
+        evaluator: "risk_identification_check"
+        threshold: 0.80
+      - rule_id: "ART9-3"
+        label: "Risk Evaluation and Assessment"
+        type: "obligation"
+        action: "Estimate and evaluate risks based on intended purpose and reasonably foreseeable misuse."
+        target: "Provider"
+        evaluator: "risk_evaluation_check"
+        threshold: 0.80
+      - rule_id: "ART9-4"
+        label: "Risk Control Measures"
+        type: "obligation"
+        action: "Implement appropriate risk management measures to address identified risks."
+        target: "Provider"
+        evaluator: "risk_control_check"
+        threshold: 0.80
+      - rule_id: "ART9-5"
+        label: "Vulnerable Groups Consideration"
+        type: "obligation"
+        action: "Consider potential adverse impacts on persons under 18 and other vulnerable groups."
+        target: "Provider"
+        evaluator: "vulnerable_groups_check"
+        threshold: 0.75
+      - rule_id: "ART9-6"
+        label: "Iterative Risk Management"
+        type: "obligation"
+        action: "Regularly update the risk management system throughout the AI system lifecycle."
+        target: "Provider"
+        evaluator: "iterative_risk_management_check"
+        threshold: 0.75
+
+  - section_id: "Article 10"
+    title: "Data and data governance"
+    metadata:
+      citation: "REGULATION (EU) 2024/1689 Article 10"
+      effective_date: "2024-08-01"
+    definitions:
+      - term: "training datasets"
+        context: "Data used for building an AI system's parameters."
+      - term: "validation datasets"
+        context: "Data used to tune the AI system and prevent overfitting."
+      - term: "testing datasets"
+        context: "Data used to evaluate the final performance of the AI system."
+      - term: "data governance"
+        context: "Processes for data collection, preparation, annotation, and quality assurance."
+    rules:
+      - rule_id: "ART10-1"
+        label: "Data Governance Practices"
+        type: "obligation"
+        action: "Implement appropriate data governance and management practices for training, validation, and testing datasets."
+        target: "Provider"
+        evaluator: "data_governance_check"
+        threshold: 0.90
+      - rule_id: "ART10-2"
+        label: "Dataset Quality and Representativeness"
+        type: "obligation"
+        action: "Ensure datasets are relevant, sufficiently representative, and free of errors to the best extent possible."
+        target: "Provider"
+        evaluator: "dataset_quality_check"
+        threshold: 0.85
+      - rule_id: "ART10-3"
+        label: "Bias Detection and Mitigation"
+        type: "obligation"
+        action: "Examine datasets for biases that could affect health, safety, or fundamental rights, and implement mitigation measures."
+        target: "Provider"
+        evaluator: "bias_detection_check"
+        threshold: 0.90
+      - rule_id: "ART10-4"
+        label: "Data Preparation Operations"
+        type: "obligation"
+        action: "Apply appropriate data preparation operations including annotation, labeling, cleaning, enrichment, and aggregation."
+        target: "Provider"
+        evaluator: "data_preparation_check"
+        threshold: 0.80
+      - rule_id: "ART10-5"
+        label: "Dataset Assessment"
+        type: "obligation"
+        action: "Assess availability, quantity, and suitability of datasets needed for the intended purpose."
+        target: "Provider"
+        evaluator: "dataset_assessment_check"
+        threshold: 0.80
+      - rule_id: "ART10-6"
+        label: "Geographical and Contextual Relevance"
+        type: "obligation"
+        action: "Ensure datasets account for geographical, contextual, behavioral, and functional settings of intended use."
+        target: "Provider"
+        evaluator: "contextual_relevance_check"
+        threshold: 0.75
+
+  - section_id: "Article 11"
+    title: "Technical documentation"
+    metadata:
+      citation: "REGULATION (EU) 2024/1689 Article 11"
+      effective_date: "2024-08-01"
+    definitions:
+      - term: "technical documentation"
+        context: "Comprehensive documentation demonstrating compliance with EU AI Act requirements."
+    rules:
+      - rule_id: "ART11-1"
+        label: "Technical Documentation Creation"
+        type: "obligation"
+        action: "Draw up comprehensive technical documentation before placing the high-risk AI system on the market or putting it into service."
+        target: "Provider"
+        evaluator: "technical_documentation_check"
+        threshold: 0.90
+      - rule_id: "ART11-2"
+        label: "Documentation Maintenance"
+        type: "obligation"
+        action: "Keep technical documentation up-to-date throughout the AI system lifecycle."
+        target: "Provider"
+        evaluator: "documentation_maintenance_check"
+        threshold: 0.85
+      - rule_id: "ART11-3"
+        label: "Compliance Demonstration"
+        type: "obligation"
+        action: "Ensure technical documentation demonstrates compliance with Section 2 requirements and provides necessary information to competent authorities."
+        target: "Provider"
+        evaluator: "compliance_demonstration_check"
+        threshold: 0.85
+
+  - section_id: "Article 12"
+    title: "Record-keeping"
+    metadata:
+      citation: "REGULATION (EU) 2024/1689 Article 12"
+      effective_date: "2024-08-01"
+    definitions:
+      - term: "automatic recording"
+        context: "Automated logging of events throughout the AI system lifetime."
+      - term: "traceability"
+        context: "Ability to track and verify the functioning and decisions of the AI system."
+    rules:
+      - rule_id: "ART12-1"
+        label: "Automatic Event Recording"
+        type: "obligation"
+        action: "Technically enable automatic recording of events (logs) over the lifetime of the high-risk AI system."
+        target: "High-risk AI systems"
+        evaluator: "automatic_logging_check"
+        threshold: 0.90
+      - rule_id: "ART12-2"
+        label: "Traceability Logging"
+        type: "obligation"
+        action: "Enable recording of events relevant for identifying risks, substantial modifications, and operation monitoring."
+        target: "High-risk AI systems"
+        evaluator: "traceability_logging_check"
+        threshold: 0.85
+      - rule_id: "ART12-3"
+        label: "Biometric System Logging"
+        type: "obligation"
+        action: "Provide minimum logging requirements for biometric identification systems including usage periods, reference databases, and matched inputs."
+        target: "High-risk AI systems (biometric)"
+        evaluator: "biometric_logging_check"
+        threshold: 0.90
+
+  - section_id: "Article 13"
+    title: "Transparency and provision of information to deployers"
+    metadata:
+      citation: "REGULATION (EU) 2024/1689 Article 13"
+      effective_date: "2024-08-01"
+    definitions:
+      - term: "instructions for use"
+        context: "Information provided by the provider to help the deployer understand the system's capabilities and limitations."
+      - term: "transparency"
+        context: "Design principle ensuring deployers can interpret and appropriately use AI system outputs."
+    rules:
+      - rule_id: "ART13-1"
+        label: "Transparency by Design"
+        type: "obligation"
+        action: "Design and develop high-risk AI systems to ensure operation is sufficiently transparent to enable deployers to interpret output."
+        target: "Provider"
+        evaluator: "transparency_by_design_check"
+        threshold: 0.85
+      - rule_id: "ART13-2"
+        label: "Provision of Instructions"
+        type: "obligation"
+        action: "Accompany high-risk AI systems with clear, comprehensive instructions for use in appropriate digital format."
+        target: "Provider"
+        evaluator: "instructions_provision_check"
+        threshold: 0.85
+      - rule_id: "ART13-3"
+        label: "Instructions Content Requirements"
+        type: "obligation"
+        action: "Include mandatory information in instructions: provider identity, system characteristics, performance metrics, limitations, human oversight measures, and computational requirements."
+        target: "Instructions for use"
+        evaluator: "instructions_content_check"
+        threshold: 0.90
+      - rule_id: "ART13-4"
+        label: "Output Interpretability"
+        type: "obligation"
+        action: "Provide information and tools to enable deployers to interpret the AI system's output appropriately."
+        target: "Provider"
+        evaluator: "output_interpretability_check"
+        threshold: 0.80
+
+  - section_id: "Article 14"
+    title: "Human oversight"
+    metadata:
+      citation: "REGULATION (EU) 2024/1689 Article 14"
+      effective_date: "2024-08-01"
+    definitions:
+      - term: "human oversight"
+        context: "Measures ensuring human control and intervention capabilities over AI system operations."
+      - term: "automation bias"
+        context: "The tendency to over-rely on automated system outputs without critical evaluation."
+    rules:
+      - rule_id: "ART14-1"
+        label: "Human Oversight by Design"
+        type: "obligation"
+        action: "Design and develop high-risk AI systems with appropriate human-machine interface tools for effective human oversight."
+        target: "Provider"
+        evaluator: "human_oversight_design_check"
+        threshold: 0.85
+      - rule_id: "ART14-2"
+        label: "Risk Prevention through Oversight"
+        type: "obligation"
+        action: "Implement human oversight measures to prevent or minimize risks to health, safety, or fundamental rights."
+        target: "Provider"
+        evaluator: "risk_prevention_oversight_check"
+        threshold: 0.80
+      - rule_id: "ART14-3"
+        label: "Oversight Measures Implementation"
+        type: "obligation"
+        action: "Ensure oversight measures are commensurate with risks and implemented through built-in measures or deployer actions."
+        target: "Provider"
+        evaluator: "oversight_measures_check"
+        threshold: 0.80
+      - rule_id: "ART14-4"
+        label: "Human Understanding and Monitoring"
+        type: "obligation"
+        action: "Enable natural persons to understand system capacities, remain aware of automation bias, and correctly interpret outputs."
+        target: "Provider"
+        evaluator: "human_understanding_check"
+        threshold: 0.85
+      - rule_id: "ART14-5"
+        label: "Intervention Capability"
+        type: "obligation"
+        action: "Provide mechanisms for human operators to intervene, override, or halt the AI system operation."
+        target: "Provider"
+        evaluator: "intervention_capability_check"
+        threshold: 0.90

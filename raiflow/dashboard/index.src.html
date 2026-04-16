@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RaiFlow | AI Compliance Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="topbar">
+    <div class="logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="url(#lg)"/><path d="M8 14h4l2-5 4 10 2-5h4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="lg" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs></svg>
+      <span class="logo-text">RaiFlow</span>
+    </div>
+    <div class="stepper" id="stepper">
+      <div class="step active" data-step="1"><span class="step-num">1</span><span class="step-label">Connect</span></div>
+      <div class="step-line"></div>
+      <div class="step" data-step="2"><span class="step-num">2</span><span class="step-label">Framework</span></div>
+      <div class="step-line"></div>
+      <div class="step" data-step="3"><span class="step-num">3</span><span class="step-label">Run Audit</span></div>
+      <div class="step-line"></div>
+      <div class="step" data-step="4"><span class="step-num">4</span><span class="step-label">Results</span></div>
+      <div class="step-line"></div>
+      <div class="step" data-step="5"><span class="step-num">5</span><span class="step-label">Report</span></div>
+    </div>
+    <div class="status-pill">
+      <span class="dot" id="status-dot"></span>
+      <span id="status-text">Connecting...</span>
+    </div>
+  </nav>
+
+  <main class="wizard">
+
+    <section class="wizard-step active" id="step-1">
+      <div class="step-hero">
+        <div class="step-icon">🔌</div>
+        <h1>Connect your AI app</h1>
+        <p>Tell RaiFlow where your RAG, LLM, or Agent app is running so we can audit it.</p>
+      </div>
+      <div class="card-grid">
+        <div class="option-card selected" id="opt-interceptor" onclick="selectOption('interceptor')">
+          <div class="option-icon">🛡️</div>
+          <div class="option-body">
+            <strong>HTTP Interceptor <span class="option-tag recommended">Recommended</span></strong>
+            <p>Point RaiFlow at your running app's URL. Zero code changes needed.</p>
+          </div>
+          <div class="option-check">✓</div>
+        </div>
+        <div class="option-card" id="opt-decorator" onclick="selectOption('decorator')">
+          <div class="option-icon">🐍</div>
+          <div class="option-body">
+            <strong>Python Decorator</strong>
+            <p>Add <code>@shield</code> to your RAG function for deep LLM-level auditing.</p>
+          </div>
+          <div class="option-check">✓</div>
+        </div>
+        <div class="option-card" id="opt-direct" onclick="selectOption('direct')">
+          <div class="option-icon">📋</div>
+          <div class="option-body">
+            <strong>Paste a Response</strong>
+            <p>Already have a response? Paste it directly for instant compliance check.</p>
+          </div>
+          <div class="option-check">✓</div>
+        </div>
+      </div>
+
+      <div class="connect-form" id="form-interceptor">
+        <div class="form-row">
+          <div class="field">
+            <label for="targetUrl">Your app's URL</label>
+            <input type="text" id="targetUrl" placeholder="http://localhost:7860" value="http://localhost:7860" />
+          </div>
+          <div class="field field-sm">
+            <label for="interceptorPort">Interceptor port</label>
+            <input type="number" id="interceptorPort" value="8080" />
+          </div>
+        </div>
+        <div class="info-box">
+          <span>💡</span>
+          <span>Start your app first, then RaiFlow will proxy all traffic through port <strong id="portPreview">8080</strong> and audit every response automatically.</span>
+        </div>
+      </div>
+
+      <div class="connect-form hidden" id="form-decorator">
+        <div class="code-block">
+          <div class="code-header"><span>Python</span><button onclick="copyCode('decorator-code')">Copy</button></div>
+          <pre id="decorator-code">from raiflow import shield
+
+@shield(framework="eu_ai_act")
+def my_rag_pipeline(query: str):
+    return {"answer": "...", "context": "..."}
+
+result = my_rag_pipeline("your query")</pre>
+        </div>
+      </div>
+
+      <div class="connect-form hidden" id="form-direct">
+        <div class="field">
+          <label for="directPaste">Paste your RAG response (JSON)</label>
+          <textarea id="directPaste" rows="6" placeholder='{"question": "...", "context": "...", "answer": "..."}'></textarea>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button class="btn-primary" onclick="goStep(2)">Continue →</button>
+      </div>
+    </section>
+
+    <section class="wizard-step" id="step-2">
+      <div class="step-hero">
+        <div class="step-icon">📜</div>
+        <h1>Choose a regulatory framework</h1>
+        <p>Select which standard you want to audit your AI system against.</p>
+      </div>
+      <div class="framework-grid" id="framework-grid"></div>
+      <div class="step-actions">
+        <button class="btn-ghost" onclick="goStep(1)">← Back</button>
+        <button class="btn-primary" onclick="goStep(3)">Continue →</button>
+      </div>
+    </section>
+
+    <section class="wizard-step" id="step-3">
+      <div class="step-hero">
+        <div class="step-icon">🚀</div>
+        <h1>Run the compliance audit</h1>
+        <p>RaiFlow will evaluate your app's responses against the selected framework.</p>
+      </div>
+      <div class="audit-config-card">
+        <div class="config-row"><span class="config-label">Target</span><span class="config-value" id="cfg-target">—</span></div>
+        <div class="config-row"><span class="config-label">Framework</span><span class="config-value" id="cfg-framework">—</span></div>
+        <div class="config-row"><span class="config-label">Mode</span><span class="config-value" id="cfg-mode">—</span></div>
+        <div class="config-row"><span class="config-label">Checks</span><span class="config-value">PII · Toxicity · Faithfulness · EU AI Act Articles 9–14</span></div>
+      </div>
+      <div class="live-panel" id="live-panel" style="display:none">
+        <div class="live-header">
+          <span class="pulse-dot"></span>
+          <span>Live audit running...</span>
+          <span class="live-count">Events: <strong id="live-count">0</strong></span>
+        </div>
+        <div class="live-feed" id="live-feed"></div>
+      </div>
+      <div class="step-actions">
+        <button class="btn-ghost" onclick="goStep(2)">← Back</button>
+        <button class="btn-primary btn-run" id="btnRun" onclick="startAudit()">▶ Start Audit</button>
+      </div>
+    </section>
+
+    <section class="wizard-step" id="step-4">
+      <div class="step-hero">
+        <div class="step-icon">📊</div>
+        <h1>Compliance results</h1>
+        <p>Audit complete — here's how your system scored.</p>
+      </div>
+      <div class="score-banner">
+        <div class="score-circle" id="score-circle">
+          <span class="score-num" id="score-num">--</span>
+          <span class="score-label">Overall</span>
+        </div>
+        <div class="score-meta">
+          <div class="score-meta-item"><span class="meta-label">Risk Level</span><span class="meta-value" id="risk-level">--</span></div>
+          <div class="score-meta-item"><span class="meta-label">Checks Run</span><span class="meta-value" id="checks-run">--</span></div>
+          <div class="score-meta-item"><span class="meta-label">Framework</span><span class="meta-value" id="result-framework">--</span></div>
+          <div class="score-meta-item"><span class="meta-label">Violations</span><span class="meta-value" id="violations-count">--</span></div>
+        </div>
+      </div>
+      <div class="results-section">
+        <h3 class="results-section-title">Article-by-Article Breakdown</h3>
+        <div class="heatmap-grid" id="heatmap"></div>
+      </div>
+      <div class="results-section">
+        <h3 class="results-section-title">Detailed Findings</h3>
+        <div id="findings"></div>
+      </div>
+      <div class="step-actions">
+        <button class="btn-ghost" onclick="goStep(3)">← Run Again</button>
+        <button class="btn-primary" onclick="goStep(5)">Download Report →</button>
+      </div>
+    </section>
+
+    <section class="wizard-step" id="step-5">
+      <div class="step-hero">
+        <div class="step-icon">📄</div>
+        <h1>Your compliance report is ready</h1>
+        <p>Download a full PDF report to share with your legal or engineering team.</p>
+      </div>
+      <div class="report-preview" id="report-preview"></div>
+      <div class="step-actions">
+        <button class="btn-ghost" onclick="goStep(4)">← Back to Results</button>
+        <button class="btn-primary btn-download" onclick="downloadReport()">⬇ Download PDF Report</button>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

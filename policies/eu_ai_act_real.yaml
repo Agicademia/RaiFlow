@@ -1,0 +1,115 @@
+policy: EU Artificial Intelligence Act
+version: 2024/1689
+regulatory_sections:
+- section_id: Articles 12-14
+  metadata:
+    citation: Regulation (EU) 2024/1689
+    title: 'High-Risk AI Systems: Record-keeping, Transparency, and Human Oversight'
+  rules:
+  - rule_id: ART12-1
+    label: Automatic recording of events
+    type: obligation
+    action: allow for the automatic recording of events (logs)
+    target: High-risk AI systems
+    conditions: over the lifetime of the system
+    verbatim: High-risk AI systems shall technically allow for the automatic recording
+      of events (logs) over the lifetime of the system.
+  - rule_id: ART12-2
+    label: Logging capabilities for traceability
+    type: obligation
+    action: enable the recording of events
+    target: High-risk AI systems
+    conditions: relevant for identifying risks, substantial modifications, post-market
+      monitoring, and operation monitoring
+    verbatim: 'In order to ensure a level of traceability of the functioning of a
+      high-risk AI system that is appropriate to the intended purpose of the system,
+      logging capabilities shall enable the recording of events relevant for: (a)
+      identifying situations that may result in the high-risk AI system presenting
+      a risk within the meaning of Article 79(1) or in a substantial modification;
+      (b) facilitating the post-market monitoring referred to in Article 72; and (c)
+      monitoring the operation of high-risk AI systems referred to in Article 26(5).'
+  - rule_id: ART12-3
+    label: Minimum logging for biometric systems
+    type: obligation
+    action: provide minimum logging requirements
+    target: High-risk AI systems referred to in point 1 (a), of Annex III
+    conditions: 'at a minimum: recording period, reference database, matched input
+      data, and identification of verifying persons'
+    verbatim: 'For high-risk AI systems referred to in point 1 (a), of Annex III,
+      the logging capabilities shall provide, at a minimum: (a) recording of the period
+      of each use of the system (start date and time and end date and time of each
+      use); (b) the reference database against which input data has been checked by
+      the system; (c) the input data for which the search has led to a match; (d)
+      the identification of the natural persons involved in the verification of the
+      results, as referred to in Article 14(5).'
+  - rule_id: ART13-1
+    label: Transparency by design
+    type: obligation
+    action: ensure that operation is sufficiently transparent
+    target: Provider
+    conditions: "to enable deployers to interpret a system\u2019s output and use it\
+      \ appropriately"
+    verbatim: "High-risk AI systems shall be designed and developed in such a way\
+      \ as to ensure that their operation is sufficiently transparent to enable deployers\
+      \ to interpret a system\u2019s output and use it appropriately."
+  - rule_id: ART13-2
+    label: Provision of instructions for use
+    type: obligation
+    action: accompany system with instructions for use
+    target: Provider
+    conditions: in an appropriate digital format or otherwise; must include concise,
+      complete, correct and clear information
+    verbatim: High-risk AI systems shall be accompanied by instructions for use in
+      an appropriate digital format or otherwise that include concise, complete, correct
+      and clear information that is relevant, accessible and comprehensible to deployers.
+  - rule_id: ART13-3
+    label: Content of instructions for use
+    type: obligation
+    action: contain mandatory information
+    target: Instructions for use
+    conditions: must include identity of provider, characteristics/performance/limitations,
+      predetermined changes, human oversight measures, and technical resources
+    verbatim: 'The instructions for use shall contain at least the following information:
+      (a) the identity and the contact details of the provider... (b) the characteristics,
+      capabilities and limitations of performance of the high-risk AI system... (c)
+      the changes to the high-risk AI system and its performance which have been pre-determined
+      by the provider... (d) the human oversight measures... (e) the computational
+      and hardware resources needed... (f) where relevant, a description of the mechanisms...
+      to properly collect, store and interpret the logs.'
+  - rule_id: ART14-1
+    label: Human oversight by design
+    type: obligation
+    action: ensure systems can be effectively overseen by natural persons
+    target: Provider
+    conditions: during the period in which they are in use
+    verbatim: High-risk AI systems shall be designed and developed in such a way,
+      including with appropriate human-machine interface tools, that they can be effectively
+      overseen by natural persons during the period in which they are in use.
+  - rule_id: ART14-3
+    label: Implementation of oversight measures
+    type: obligation
+    action: ensure oversight measures are commensurate with risks
+    target: Provider
+    conditions: through measures built into the system or identified for implementation
+      by the deployer
+    verbatim: 'The oversight measures shall be commensurate with the risks, level
+      of autonomy and context of use of the high-risk AI system, and shall be ensured
+      through either one or both of the following types of measures: (a) measures
+      identified and built... into the high-risk AI system by the provider... (b)
+      measures identified by the provider... that are appropriate to be implemented
+      by the deployer.'
+  - rule_id: ART14-4
+    label: Enabling natural persons in oversight
+    type: obligation
+    action: provide system to enable natural persons to monitor and interpret
+    target: Provider
+    conditions: to understand capacities, remain aware of automation bias, and correctly
+      interpret output
+    verbatim: "For the purpose of implementing paragraphs 1, 2 and 3, the high-risk\
+      \ AI system shall be provided to the deployer in such a way that natural persons\
+      \ to whom human oversight is assigned are enabled, as appropriate and proportionate:\
+      \ (a) to properly understand the relevant capacities and limitations... (b)\
+      \ to remain aware of the possible tendency of automatically relying or over-relying\
+      \ on the output... (c) to correctly interpret the high-risk AI system\u2019\
+      s output."
+  definitions: []

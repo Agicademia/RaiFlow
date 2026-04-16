@@ -1,5 +1,6 @@
 # Python
 __pycache__/
+node_modules/
 *.py[cod]
 *$py.class
 .ipynb_checkpoints/
@@ -14,14 +15,35 @@ ENV/
 dist/
 build/
 *.egg-info/
+.kiro/
+.env
+.vscode/
 
 # Tests
 .pytest_cache/
 .coverage
 htmlcov/
+rag_app/
 
 # Misc
 .DS_Store
 Thumbs.db
 *.log
+raiflow_audit_trail.json
+list_models.py
+extract_official.py
+tmp_downloader.py
+demo_llama3.py
 enhancements_ideas.md
+Gemma4good
+showcase.md
+safety_audit_report.md.resolved
+raiflow_compliance_walkthrough.ipynb.modified
+dejure-summary.md
+De Jure.pdf
+gemma4-test-ideas.md
+bundle.py
+EU-AI-Act.pdf
+progress1.md
+.raiflow_compliance_walkthrough.ipynb
+raiflow_compliance_walkthrough.ipynb
