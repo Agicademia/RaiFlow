@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="raiflow\dashboard\2.jpg" alt="RaiFlow Logo" width="500"/>
+<img src="raiflow\dashboard\raiflow banner.png" alt="RaiFlow Logo"/>
 
 # RaiFlow
 
