@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="raiflow/dashboard/20260416_2153_Image Generation_simple_compose_01kpbhmqhsekvsrb8bj18q9s7a.png" alt="RaiFlow Logo" height="100" style="width: auto; max-width: 100%; object-fit: contain;"/>
+<img src="raiflow\dashboard\2.jpg" alt="RaiFlow Logo" height="100" style="width: auto; max-width: 100%; object-fit: contain;"/>
 
 # RaiFlow
 
