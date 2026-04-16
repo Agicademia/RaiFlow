@@ -2,8 +2,6 @@
 
 <img src="raiflow\dashboard\raiflow-banner.png" alt="RaiFlow Logo"/>
 
----
-
 ## EU AI Act Compliance Gate for AI/ML Projects
 
 [![PyPI version](https://img.shields.io/pypi/v/raiflow.svg?color=blue)](https://pypi.org/project/raiflow/)
