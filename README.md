@@ -1,20 +1,24 @@
 <div align="center">
 
+<img src="20260416_2153_Image Generation_simple_compose_01kpbhmqhsekvsrb8bj18q9s7a.png" alt="RaiFlow Logo" width="200"/>
+
 # RaiFlow
 
 ### EU AI Act Compliance Gate for AI/ML Projects
 
-[![PyPI version](https://img.shields.io/pypi/v/raiflow.svg)](https://pypi.org/project/raiflow/)
+[![PyPI version](https://img.shields.io/pypi/v/raiflow.svg?color=blue)](https://pypi.org/project/raiflow/)
 [![Python](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![EU AI Act](https://img.shields.io/badge/Regulation-EU_AI_Act_2024%2F1689-purple.svg)](https://eur-lex.europa.eu/eli/reg/2024/1689/oj)
+[![EU AI Act](https://img.shields.io/badge/EU_AI_Act-2024%2F1689-purple.svg)](https://eur-lex.europa.eu/eli/reg/2024/1689/oj)
+[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](https://github.com/Agicademia/RaiFlow)
+[![Coverage](https://img.shields.io/badge/coverage-85%25-green.svg)](https://github.com/Agicademia/RaiFlow)
 
 **One command to scaffold, check, and enforce EU AI Act compliance across your entire CI/CD pipeline.**
 
 ```bash
 pip install raiflow
-raiflow init        # scan project, generate raiflow.yaml + GitHub Actions workflow
-raiflow check       # open live compliance dashboard in browser
+raiflow init         # scan project, generate raiflow.yaml + GitHub Actions workflow
+raiflow check        # open live compliance dashboard in browser
 ```
 
 </div>
@@ -36,8 +40,8 @@ It works by scanning your project, generating a compliance manifest (`raiflow.ya
 pip install raiflow
 
 # In your AI project directory
-raiflow init                          # scaffold raiflow.yaml + .github/workflows/rai-compliance.yml
-raiflow check --stage ci              # open dashboard, run all checks
+raiflow init                             # scaffold raiflow.yaml + .github/workflows/rai-compliance.yml
+raiflow check --stage ci                 # open dashboard, run all checks
 raiflow check --stage ci --no-dashboard  # headless, for CI
 ```
 

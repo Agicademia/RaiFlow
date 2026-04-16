@@ -31,6 +31,9 @@ rag_app/
 Thumbs.db
 *.log
 raiflow_audit_trail.json
+
+# External test projects (not part of this repo)
+private-gpt/
 startup-define.md
 list_models.py
 extract_official.py
@@ -49,4 +52,4 @@ EU-AI-Act.pdf
 progress1.md
 .raiflow_compliance_walkthrough.ipynb
 20260416_2153_Image Generation_simple_compose_01kpbhmqhsekvsrb8bj18q9s7a.png
-
+/private-gpt/
