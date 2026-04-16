@@ -133,7 +133,7 @@ def check(stage, manifest, policy, output, target, threshold, enable_llm_checks,
     try:
         results = runner.run(stage)
 
-        report = build_report(stage, m, results)
+        report = build_report(stage, m, results, enable_llm_checks=enable_llm_checks)
         write_report(report, output)
 
         failed = [r for r in results if r.status == "fail"]

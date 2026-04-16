@@ -38,6 +38,10 @@ class Robustness(BaseModel):
     toxicity_threshold: float = 0.7
 
 
+class TechnicalDocumentation(BaseModel):
+    path: Optional[str] = None
+
+
 class RaiFlowManifest(BaseModel):
     model_config = ConfigDict(extra="allow")
 
@@ -52,6 +56,7 @@ class RaiFlowManifest(BaseModel):
     data_governance: DataGovernance = Field(default_factory=DataGovernance)
     robustness: Robustness = Field(default_factory=Robustness)
     banned_models: List[str] = Field(default_factory=list)
+    technical_documentation: TechnicalDocumentation = Field(default_factory=TechnicalDocumentation)
 
 
 def load_manifest(path: str = "raiflow.yaml") -> RaiFlowManifest:

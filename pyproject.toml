@@ -46,3 +46,8 @@ include = ["raiflow*"]
 
 [tool.setuptools.package-data]
 raiflow = ["data/*.yml", "data/*.yaml", "dashboard/*.html"]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore:Rule ID.*not found in policy:UserWarning",
+]

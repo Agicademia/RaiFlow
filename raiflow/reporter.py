@@ -25,8 +25,9 @@ def build_report(
     manifest: RaiFlowManifest,
     checks: List[CheckResult],
     git_sha: str = None,
+    enable_llm_checks: bool = False,
 ) -> dict:
-    """Build a structured compliance report dict (Requirements 9.1, 9.2)."""
+    """Build a structured compliance report dict (Requirements 9.1, 9.2, 10.4)."""
     overall = "pass" if all(c.status != "fail" for c in checks) else "fail"
     return {
         "schema_version": SCHEMA_VERSION,
@@ -35,6 +36,7 @@ def build_report(
         "stage": stage,
         "system_name": manifest.system_name,
         "overall_status": overall,
+        "evaluation_mode": "semantic" if enable_llm_checks else "static",
         "checks": [
             {
                 "article_id": c.article_id,

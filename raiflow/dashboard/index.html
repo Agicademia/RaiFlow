@@ -331,8 +331,8 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--
 // ── Stage-to-checks mapping ───────────────────────────────────────────────────
 const STAGE_CHECKS = {
   'pre-commit':  ['Banned Model Scan'],
-  'ci':          ['Banned Model Scan','Transparency','Risk Mgmt','Human Oversight','Logging','Bias Detection','Robustness'],
-  'pre-deploy':  ['Banned Model Scan','Transparency','Risk Mgmt','Human Oversight','Logging','Bias Detection','Robustness'],
+  'ci':          ['Banned Model Scan','Transparency','Risk Mgmt','Human Oversight','Logging','Bias Detection','Robustness','Technical Docs'],
+  'pre-deploy':  ['Banned Model Scan','Transparency','Risk Mgmt','Human Oversight','Logging','Bias Detection','Robustness','Technical Docs'],
   'post-deploy': ['Banned Model Scan','Transparency','Risk Mgmt','Human Oversight','Logging'],
 };
 
@@ -385,6 +385,13 @@ const CHECK_DETAILS = {
     article: 'Article 10',
     description: 'Apply appropriate data preparation operations including annotation, labeling, cleaning, enrichment, and aggregation. Tests model outputs against red-team prompts to detect toxic or harmful responses.',
     citation: 'REGULATION (EU) 2024/1689 Article 10',
+    target: 'Provider'
+  },
+  'ART11-1': {
+    title: 'Technical Documentation',
+    article: 'Article 11',
+    description: 'Draw up comprehensive technical documentation before placing the high-risk AI system on the market or putting it into service. Documentation must cover all Annex IV elements: system description, training data, performance metrics, limitations, and human oversight measures.',
+    citation: 'REGULATION (EU) 2024/1689 Article 11',
     target: 'Provider'
   }
 };

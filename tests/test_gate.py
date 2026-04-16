@@ -415,6 +415,7 @@ class TestRunStageDispatch:
             "_check_banned_models",
             "_check_bias_detection",
             "_check_robustness",
+            "_check_technical_documentation",
         ]:
             mock_result = CheckResult(
                 article_id="X", rule_id="X-1", check_name=method,
@@ -447,7 +448,7 @@ class TestRunStageDispatch:
         runner._check_logging.assert_called_once()
         runner._check_bias_detection.assert_called_once()
         runner._check_robustness.assert_called_once()
-        assert len(results) == 7
+        assert len(results) == 8
 
     def test_pre_deploy_runs_all_checks_including_bias_and_robustness(self):
         m = _make_manifest()
@@ -455,7 +456,7 @@ class TestRunStageDispatch:
         results = runner.run("pre-deploy")
         runner._check_bias_detection.assert_called_once()
         runner._check_robustness.assert_called_once()
-        assert len(results) == 7
+        assert len(results) == 8
 
     def test_post_deploy_skips_bias_and_robustness(self):
         m = _make_manifest()
