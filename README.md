@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="raiflow\dashboard\20260416_2153_Image Generation_simple_compose_01kpbhmqhsekvsrb8bj18q9s7a.png" alt="RaiFlow Logo" width="200" height="100"/>
+<img src="raiflow/dashboard/20260416_2153_Image Generation_simple_compose_01kpbhmqhsekvsrb8bj18q9s7a.png" alt="RaiFlow Logo" width="600" style="max-width: 100%; height: auto;"/>
 
 # RaiFlow
 
@@ -10,8 +10,6 @@
 [![Python](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![EU AI Act](https://img.shields.io/badge/EU_AI_Act-2024%2F1689-purple.svg)](https://eur-lex.europa.eu/eli/reg/2024/1689/oj)
-[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](https://github.com/Agicademia/RaiFlow)
-[![Coverage](https://img.shields.io/badge/coverage-85%25-green.svg)](https://github.com/Agicademia/RaiFlow)
 
 **One command to scaffold, check, and enforce EU AI Act compliance across your entire CI/CD pipeline.**
 </div>
@@ -30,7 +28,7 @@ raiflow check           # open live compliance dashboard in browser
 
 ## What is RaiFlow?
 
-RaiFlow is a developer tool that enforces EU AI Act compliance (Articles 9–14) at every stage of your AI project's delivery pipeline — from pre-commit hooks to production deployments.
+RaiFlow is a developer tool that enforces EU AI Act compliance (Articles 9–14) at every stage of your AI project's delivery pipeline from pre-commit hooks to production deployments.
 
 It works by scanning your project, generating a compliance manifest (`raiflow.yaml`), running static checks against that manifest, and streaming results to a live browser dashboard. In CI environments it runs headlessly and blocks deployments on failure.
 
