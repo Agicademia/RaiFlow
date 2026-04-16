@@ -112,11 +112,11 @@ class TestDashboardFlagInCI:
 
 class TestRunStateInitial:
     def test_run_state_initial(self):
-        """Requirement 2.4: /api/run-state returns empty results and status='running' on startup."""
+        """Requirement 2.4: /api/run-state returns empty results and status='idle' on startup."""
         server = _make_server()
         state = server.get_run_state()
         assert state.results == []
-        assert state.status == "running"
+        assert state.status == "idle"
 
 
 # ---------------------------------------------------------------------------

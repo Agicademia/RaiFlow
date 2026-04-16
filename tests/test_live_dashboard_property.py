@@ -83,7 +83,7 @@ def status_to_css_class(status: str) -> str:
 # ---------------------------------------------------------------------------
 
 # Feature: live-dashboard, Property 1: CI detection is total over all non-empty CI values
-@given(ci_value=st.text(min_size=1, alphabet=st.characters(blacklist_characters="\x00")))
+@given(ci_value=st.text(min_size=1, alphabet=st.characters(blacklist_characters="\x00", blacklist_categories=("Cs",))))
 @settings(max_examples=200, suppress_health_check=[HealthCheck.function_scoped_fixture])
 def test_is_ci_any_nonempty_value(ci_value, monkeypatch):
     """For any non-empty string assigned to CI env var, _is_ci() shall return True.

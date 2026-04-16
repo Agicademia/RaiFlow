@@ -19,10 +19,21 @@ class RaiFlowJudge:
     def _query_model(self, prompt: str) -> str:
         # CI/CD Mock Mode: Return positive responses if no LLM is available
         if os.getenv("RAIFLOW_MOCK_LLM") == "true":
-            # Very simple heuristic mock for CI stability
-            if "compliant" in prompt.lower() or "high" in prompt.lower():
-                return json.dumps({"score": 0.95, "average_score": 0.95, "reasoning": "CI MOCK: Compliance detected.", "critique": "None."})
-            return json.dumps({"score": 0.2, "average_score": 0.2, "reasoning": "CI MOCK: Issues detected.", "critique": "Minor issues."})
+            # Score based on the length of the CONTEXT/DOCUMENTATION section in the prompt.
+            # Compliant scenarios have rich, detailed context; non-compliant ones are sparse.
+            # Extract the text between "CONTEXT/DOCUMENTATION:" and "CLAIM/RESPONSE:" markers.
+            import re as _re
+            context_match = _re.search(
+                r'CONTEXT/DOCUMENTATION:\s*(.*?)(?:CLAIM/RESPONSE:|Score the following|Assess whether|$)',
+                prompt, _re.DOTALL
+            )
+            context_text = context_match.group(1).strip() if context_match else ""
+            context_len = len(context_text)
+            if context_len > 300:
+                return json.dumps({"score": 0.9, "average_score": 0.9, "reasoning": "CI MOCK: Detailed content.", "critique": "None."})
+            elif context_len > 100:
+                return json.dumps({"score": 0.55, "average_score": 0.55, "reasoning": "CI MOCK: Moderate content.", "critique": "Some gaps."})
+            return json.dumps({"score": 0.2, "average_score": 0.2, "reasoning": "CI MOCK: Minimal content.", "critique": "Insufficient detail."})
             
         if self.api_key:
             return self._query_cloud(prompt)

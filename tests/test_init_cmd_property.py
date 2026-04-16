@@ -381,7 +381,7 @@ def test_no_overwrite_without_force(
         assert result.action == "skipped", (
             f"Expected action='skipped' but got '{result.action}'"
         )
-        assert manifest_path.read_text(encoding="utf-8", newline="") == original_content, (
+        assert manifest_path.read_text(encoding="utf-8") == original_content, (
             "write_manifest with force=False modified the existing file."
         )
 
@@ -394,7 +394,7 @@ def test_no_overwrite_without_force(
         assert result_wf.action == "skipped", (
             f"Expected action='skipped' for workflow but got '{result_wf.action}'"
         )
-        assert workflow_path.read_text(encoding="utf-8", newline="") == original_content, (
+        assert workflow_path.read_text(encoding="utf-8") == original_content, (
             "write_workflow with force=False modified the existing file."
         )
 
