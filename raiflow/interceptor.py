@@ -224,7 +224,7 @@ def run_interceptor(
     RaiFlowProxyHandler.log_path    = log_path
     RaiFlowProxyHandler.block_on_pii = block_on_pii
 
-    server = HTTPServer(("0.0.0.0", port), RaiFlowProxyHandler)
+    server = HTTPServer(("127.0.0.1", port), RaiFlowProxyHandler)
 
     print(f"""
 ╔══════════════════════════════════════════════════════╗

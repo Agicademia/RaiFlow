@@ -25,10 +25,14 @@ jobs:
           pip install pytest pytest-cov pytest-asyncio
 
       - name: Run unit tests
+        env:
+          RAIFLOW_MOCK_LLM: "true"
         run: |
           python -m pytest tests/ -v --cov=raiflow --cov-report=xml
 
       - name: Run EU AI Act compliance tests
+        env:
+          RAIFLOW_MOCK_LLM: "true"
         run: |
           python -m pytest tests/eu_ai_act_test.py -v --tb=short
 

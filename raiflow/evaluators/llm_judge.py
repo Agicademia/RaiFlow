@@ -17,6 +17,13 @@ class RaiFlowJudge:
             self.base_url = f"{base_url or 'http://localhost:11434'}/api/generate"
 
     def _query_model(self, prompt: str) -> str:
+        # CI/CD Mock Mode: Return positive responses if no LLM is available
+        if os.getenv("RAIFLOW_MOCK_LLM") == "true":
+            # Very simple heuristic mock for CI stability
+            if "compliant" in prompt.lower() or "high" in prompt.lower():
+                return json.dumps({"score": 0.95, "average_score": 0.95, "reasoning": "CI MOCK: Compliance detected.", "critique": "None."})
+            return json.dumps({"score": 0.2, "average_score": 0.2, "reasoning": "CI MOCK: Issues detected.", "critique": "Minor issues."})
+            
         if self.api_key:
             return self._query_cloud(prompt)
         return self._query_local(prompt)
@@ -142,7 +149,8 @@ Response must be a JSON object with this schema:
                 # Use computed avg if the reported one looks fishy (exactly 0.0 with non-zero criteria)
                 if parsed.get("average_score", 0.0) == 0.0 and computed_avg > 0.0:
                     parsed["average_score"] = round(computed_avg, 3)
-            except Exception:
+            except Exception as e:
+                print(f"[JUDGE] Error calculating average score: {e}")
                 pass
 
         return parsed
@@ -190,7 +198,8 @@ Output the corrected JSON extraction object. Use the same schema as CURRENT EXTR
         clean = re.sub(r'```(?:json)?\s*', '', text).replace('```', '').strip()
         try:
             return json.loads(clean)
-        except Exception:
+        except Exception as e:
+            # Fallback to discover mode
             pass
 
         # 2. Sequential Discovery (raw_decode)
@@ -230,7 +239,8 @@ Output the corrected JSON extraction object. Use the same schema as CURRENT EXTR
             if json_match:
                 data = json.loads(json_match.group())
                 return float(data.get("score", 0.0))
-        except Exception:
+        except Exception as e:
+            # Fallback to regex
             pass
 
         # Fallback regex

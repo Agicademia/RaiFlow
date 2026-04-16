@@ -40,7 +40,8 @@ class RaiFlowShield:
             try:
                 with open(self.log_path, "r") as f:
                     events = json.load(f)
-            except:
+            except Exception as e:
+                print(f"[SHIELD] Failed to load log file: {e}")
                 events = []
         
         events.append({
@@ -54,15 +55,17 @@ class RaiFlowShield:
 # Global cache to avoid re-initializing engines on every function call
 _SHIELD_CACHE = {}
 
-def shield(framework: str = "eu_ai_act", model: Optional[str] = None, max_retries: int = 1):
+def shield(framework: str = "eu_ai_act", policy: Optional[str] = None, model: Optional[str] = None, max_retries: int = 1):
     """
     Decorator for AI pipelines to automatically trigger compliance audits.
     
     Args:
-        framework: Regulatory framework to use (e.g., "eu_ai_act", "nist_ai_rmf")
+        framework: Regulatory framework to use (alias for policy)
+        policy: Regulatory framework to use (e.g., "eu_ai_act")
         model: LLM model to use for evaluation
         max_retries: Maximum retries for compliance evaluation
     """
+    active_framework = policy or framework
     def decorator(func: Callable):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -81,12 +84,12 @@ def shield(framework: str = "eu_ai_act", model: Optional[str] = None, max_retrie
             # 3. Get or Create Shield from cache
             api_key = os.getenv("GEMMA_API_KEY")
             active_model = model or ("gemma-4-31b-it" if api_key else "gemma2:2b")
-            cache_key = f"{framework}_{active_model}"
+            cache_key = f"{active_framework}_{active_model}"
             
             if cache_key not in _SHIELD_CACHE:
-                print(f"[SHIELD] Initialized for {framework} via {active_model}")
+                print(f"[SHIELD] Initialized for {active_framework} via {active_model}")
                 _SHIELD_CACHE[cache_key] = RaiFlowShield(
-                    framework_id=framework, 
+                    framework_id=active_framework, 
                     model=active_model, 
                     api_key=api_key
                 )
