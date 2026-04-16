@@ -57,8 +57,12 @@ def run_llm_setup_wizard() -> Optional[dict]:
       - api_key: key value (if API mode) — caller should persist to env/yaml
       - env_var: env var name for the key (if API mode)
 
-    Returns None if user chose static-only.
+    Returns None if user chose static-only or if running non-interactively.
     """
+    # Skip wizard entirely in non-interactive environments (CI, tests, piped input)
+    if not sys.stdin.isatty():
+        return None
+
     click.echo()
     click.echo("─" * 60)
     click.echo("  RaiFlow Evaluation Mode Setup")
