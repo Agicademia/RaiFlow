@@ -1,7 +1,8 @@
 {
   "checks": [],
-  "generated_at": "2026-04-16T17:38:24.268801+00:00",
-  "git_sha": "bf82238",
+  "evaluation_mode": "static",
+  "generated_at": "2026-04-16T21:21:34.318649+00:00",
+  "git_sha": "b754bad",
   "overall_status": "pass",
   "schema_version": "1.0",
   "stage": "ci",

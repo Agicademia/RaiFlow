@@ -13,3 +13,25 @@ pydantic>=2.0.0
 
 # Optional: cloud LLM (Google Gemini)
 # Set GEMMA_API_KEY environment variable to enable
+
+# Core
+pytest==8.3.4
+PyYAML==6.0.3
+requests
+
+# Server
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+pydantic>=2.0.0
+
+# Testing
+httpx>=0.24.0
+hypothesis>=6.0.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.0.0
+
+# Optional: local LLM (Ollama)
+# Install Ollama separately from https://ollama.ai
+
+# Optional: cloud LLM (Google Gemini)
+# Set GEMMA_API_KEY environment variable to enable
