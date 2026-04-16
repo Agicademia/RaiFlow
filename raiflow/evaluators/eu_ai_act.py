@@ -15,8 +15,9 @@ from raiflow.evaluators.llm_judge import RaiFlowJudge
 class EUAIActEvaluators:
     """Collection of evaluators for EU AI Act compliance checks."""
     
-    def __init__(self, judge: Optional[RaiFlowJudge] = None):
-        """Initialize with an optional judge (uses Llama3 by default if not provided)."""
+    def __init__(self, judge: Optional[RaiFlowJudge] = None, enable_llm: bool = False):
+        """Initialize with an optional judge. LLM calls only happen when enable_llm=True."""
+        self.enable_llm = enable_llm
         self.judge = judge or RaiFlowJudge(model="llama3:latest")
     
     # ==================== Article 9: Risk Management System ====================
@@ -244,6 +245,11 @@ Respond with JSON: {{"score": 0.0, "reasoning": "explanation"}}"""
         """
         ART10-3: Evaluate bias detection and mitigation measures.
         """
+        if not self.enable_llm:
+            # Static fallback: pass if protected_attributes are declared
+            attrs = input_data.get("protected_attributes", [])
+            return 1.0 if attrs else 0.5
+
         context = input_data.get("context", "")
         answer = input_data.get("answer", "")
         

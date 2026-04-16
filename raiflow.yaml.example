@@ -1,0 +1,221 @@
+# ============================================================
+# raiflow.yaml.example — RaiFlow Compliance Manifest
+# ============================================================
+# Copy this file to raiflow.yaml and fill in your system's
+# details. Every field is documented below with its purpose
+# and the EU AI Act article it satisfies.
+#
+# Usage:
+#   cp raiflow.yaml.example raiflow.yaml
+#   raiflow check --stage ci
+# ============================================================
+
+
+# ------------------------------------------------------------
+# system_name  (required)
+# A human-readable identifier for your AI system.
+# Used in compliance reports and audit trails.
+# ------------------------------------------------------------
+system_name: "My RAG System"
+
+
+# ------------------------------------------------------------
+# risk_level  (required)
+# Declares the EU AI Act risk classification for this system.
+#
+# Accepted values:
+#   high     — All Article 9–14 checks are enforced.
+#   limited  — Only the articles listed in eu_ai_act_articles
+#              below are enforced.
+#   minimal  — Only the articles listed in eu_ai_act_articles
+#              below are enforced (typically none).
+#
+# Most production AI systems interacting with users should
+# start with "high" and downgrade only after a formal risk
+# assessment.
+# ------------------------------------------------------------
+risk_level: "high"  # high | limited | minimal
+
+
+# ------------------------------------------------------------
+# eu_ai_act_articles  (required)
+# List of EU AI Act article IDs that apply to this system.
+#
+# When risk_level is "high", all Article 9–14 checks run
+# regardless of this list. When risk_level is "limited" or
+# "minimal", only the articles listed here are enforced.
+#
+# Supported article IDs (matching policies/eu_ai_act.yaml):
+#   Article 9  — Risk Management Systems
+#   Article 10 — Data and Data Governance
+#   Article 11 — Technical Documentation
+#   Article 12 — Record-Keeping / Logging
+#   Article 13 — Transparency and Provision of Information
+#   Article 14 — Human Oversight
+# ------------------------------------------------------------
+eu_ai_act_articles:
+  - "Article 9"
+  - "Article 10"
+  - "Article 12"
+  - "Article 13"
+  - "Article 14"
+
+
+# ------------------------------------------------------------
+# model_metadata  (required)
+# Metadata about the AI model powering this system.
+# ------------------------------------------------------------
+model_metadata:
+
+  # name  (required)
+  # Unique identifier for the model. Used in banned-model
+  # scanning — if this name appears in the banned_models list
+  # below, the CI gate will fail immediately.
+  name: "my-rag-model-v1"
+
+  # version  (optional, default: "")
+  # Semantic version of the model artifact. Recorded in the
+  # compliance report for audit traceability.
+  version: "1.0.0"
+
+  # disclosure_flag  (required)  — EU AI Act Article 13
+  # Set to true to assert that users of this system are
+  # informed they are interacting with an AI.
+  # The CI gate will fail if this is false or absent.
+  disclosure_flag: true
+
+
+# ------------------------------------------------------------
+# risk_management  — EU AI Act Article 9
+# Documents the risk management process for this system.
+# ------------------------------------------------------------
+risk_management:
+
+  # assessment_path  (optional)
+  # Path (relative to the repository root) to the risk
+  # assessment document for this system. The CI gate checks
+  # that this file exists on disk. If absent or the file is
+  # missing, the Article 9 check is recorded as failed with
+  # reason "missing_evidence".
+  #
+  # Example document: a Markdown or PDF describing identified
+  # risks, mitigations, and residual risk acceptance.
+  assessment_path: "docs/risk_assessment.md"
+
+
+# ------------------------------------------------------------
+# oversight  — EU AI Act Article 14
+# Declares the human-override endpoints that allow operators
+# to intervene in or halt the AI system's operation.
+# ------------------------------------------------------------
+oversight:
+
+  # override_endpoints  (optional, default: [])
+  # List of URL path strings that must exist in your source
+  # code. The CI gate statically scans the files passed via
+  # --target and fails if any listed endpoint is not found.
+  #
+  # These endpoints should allow authorised humans to:
+  #   - pause or stop the AI system
+  #   - override an AI decision
+  #   - escalate to a human operator
+  override_endpoints:
+    - "/api/override"
+    - "/api/halt"
+
+
+# ------------------------------------------------------------
+# logging  — EU AI Act Article 12
+# Controls whether the RaiFlow logging middleware is active.
+# ------------------------------------------------------------
+logging:
+
+  # middleware_active  (required)
+  # Set to true to assert that the RaiFlow interceptor
+  # (raiflow/interceptor.py) is mounted and recording events.
+  # The CI gate will fail if this is false.
+  #
+  # The middleware captures: request/response pairs, model
+  # invocations, latency, and any shield decisions — creating
+  # the audit trail required by Article 12.
+  middleware_active: true
+
+
+# ------------------------------------------------------------
+# data_governance  — EU AI Act Article 10
+# Describes the training or evaluation dataset used by this
+# system. Providing dataset_path enables automatic bias
+# detection during the CI stage.
+# ------------------------------------------------------------
+data_governance:
+
+  # dataset_path  (optional)
+  # Path (relative to the repository root) to the dataset
+  # file. When present, the CI gate invokes the bias detection
+  # evaluator (raiflow/evaluators/eu_ai_act.py) against this
+  # dataset. If absent, the bias check is skipped and recorded
+  # as "skipped" with reason "no_dataset_declared".
+  dataset_path: "data/training.csv"
+
+  # format  (optional)
+  # File format of the dataset. Passed as metadata to the
+  # evaluator — the evaluator does not load the file directly,
+  # so large datasets are never read into memory.
+  # Common values: "csv", "jsonl", "parquet"
+  format: "csv"
+
+  # protected_attributes  (optional, default: [])
+  # List of column names in the dataset that represent
+  # protected characteristics under anti-discrimination law
+  # (e.g. gender, ethnicity, age, disability status).
+  # These are passed to the bias evaluator to focus its
+  # analysis on the most sensitive dimensions.
+  protected_attributes:
+    - "gender"
+    - "ethnicity"
+
+
+# ------------------------------------------------------------
+# robustness  — EU AI Act Articles 10 / 14
+# Configures adversarial and toxicity robustness checks.
+# Providing red_team_prompts_path enables automatic toxicity
+# scanning during the CI stage.
+# ------------------------------------------------------------
+robustness:
+
+  # red_team_prompts_path  (optional)
+  # Path (relative to the repository root) to a plain-text
+  # file containing adversarial / red-team prompts, one per
+  # line. The CI gate loads this file and runs each prompt
+  # through the toxicity evaluator (raiflow/evaluators/
+  # toxicity.py). If absent, robustness checks are skipped.
+  red_team_prompts_path: "tests/red_team_prompts.txt"
+
+  # toxicity_threshold  (optional, default: 0.7)
+  # Maximum acceptable toxicity score (0.0–1.0) for any
+  # single red-team prompt. If any prompt scores above this
+  # value, the CI gate records the check as failed and
+  # includes the offending prompt index in the report.
+  #
+  # Lower values are stricter. 0.7 is the recommended default
+  # for general-purpose assistants; safety-critical systems
+  # should use 0.5 or lower.
+  toxicity_threshold: 0.7
+
+
+# ------------------------------------------------------------
+# banned_models  (optional, default: [])
+# A list of model identifiers that are prohibited from being
+# deployed. The CI gate compares model_metadata.name against
+# this list and fails immediately if there is a match.
+#
+# Use this to block:
+#   - Models used for prohibited purposes under EU AI Act
+#     Annex III (e.g. social scoring, biometric
+#     categorisation of individuals in public spaces).
+#   - Deprecated or known-vulnerable model versions.
+#   - Any model your organisation has internally banned.
+# ------------------------------------------------------------
+banned_models:
+  - "social-scoring-model"
+  - "biometric-categorisation-v1"

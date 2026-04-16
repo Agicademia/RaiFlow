@@ -39,7 +39,8 @@ class RaiFlowJudge:
             response.raise_for_status()
             return response.json().get("response", "")
         except Exception as e:
-            print(f"Local Judge Error: {e}")
+            if os.getenv("RAIFLOW_VERBOSE") == "true":
+                print(f"Local Judge Error: {e}")
             return "ERROR: local fallback failed."
 
     def _query_cloud(self, prompt: str, max_network_retries: int = 2) -> str:

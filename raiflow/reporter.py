@@ -1,7 +1,61 @@
 import os
 import json
-from datetime import datetime
+from datetime import datetime, timezone
+from pathlib import Path
 from typing import Dict, List, Any
+
+from raiflow.gate import CheckResult
+from raiflow.manifest import RaiFlowManifest
+
+SCHEMA_VERSION = "1.0"
+
+
+def _get_git_sha() -> str:
+    try:
+        import subprocess
+        return subprocess.check_output(
+            ["git", "rev-parse", "--short", "HEAD"], text=True
+        ).strip()
+    except Exception:
+        return "unknown"
+
+
+def build_report(
+    stage: str,
+    manifest: RaiFlowManifest,
+    checks: List[CheckResult],
+    git_sha: str = None,
+) -> dict:
+    """Build a structured compliance report dict (Requirements 9.1, 9.2)."""
+    overall = "pass" if all(c.status != "fail" for c in checks) else "fail"
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "git_sha": git_sha or _get_git_sha(),
+        "stage": stage,
+        "system_name": manifest.system_name,
+        "overall_status": overall,
+        "checks": [
+            {
+                "article_id": c.article_id,
+                "rule_id": c.rule_id,
+                "check_name": c.check_name,
+                "status": c.status,
+                "score": c.score,
+                "threshold": c.threshold,
+                "remediation_hint": c.remediation_hint,
+            }
+            for c in checks
+        ],
+    }
+
+
+def write_report(report: dict, output_path: str) -> None:
+    """Write report dict as indented JSON, creating parent dirs as needed (Requirement 9.4)."""
+    p = Path(output_path)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with open(p, "w") as f:
+        json.dump(report, f, indent=2, sort_keys=True)
 
 class ReportGenerator:
     """Generates detailed compliance reports with improvement suggestions."""

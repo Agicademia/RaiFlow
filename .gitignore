@@ -24,12 +24,14 @@ build/
 .coverage
 htmlcov/
 rag_app/
+.hypothesis/
 
 # Misc
 .DS_Store
 Thumbs.db
 *.log
 raiflow_audit_trail.json
+startup-define.md
 list_models.py
 extract_official.py
 tmp_downloader.py
@@ -46,4 +48,5 @@ bundle.py
 EU-AI-Act.pdf
 progress1.md
 .raiflow_compliance_walkthrough.ipynb
-raiflow_compliance_walkthrough.ipynb
+20260416_2153_Image Generation_simple_compose_01kpbhmqhsekvsrb8bj18q9s7a.png
+

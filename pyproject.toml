@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "raiflow"
+version = "0.3.0"
+description = "EU AI Act compliance gate for CI/CD pipelines — scan, scaffold, and enforce AI governance in one command."
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Vaibhav Satish" }
+]
+keywords = ["eu-ai-act", "compliance", "ai-governance", "ci-cd", "llm", "rag", "responsible-ai"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "click>=8.1",
+    "pydantic>=2.0",
+    "PyYAML>=6.0",
+    "requests",
+    "fastapi>=0.111",
+    "uvicorn[standard]>=0.29",
+]
+
+[project.urls]
+Homepage = "https://github.com/Agicademia/RaiFlow"
+Repository = "https://github.com/Agicademia/RaiFlow.git"
+"Bug Tracker" = "https://github.com/Agicademia/RaiFlow/issues"
+
+[project.scripts]
+raiflow = "raiflow.cli:cli"
+
+[tool.setuptools.packages.find]
+include = ["raiflow*"]
+
+[tool.setuptools.package-data]
+raiflow = ["data/*.yml", "data/*.yaml", "dashboard/*.html"]

@@ -1,985 +1,816 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>RaiFlow | AI Compliance Platform</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>RaiFlow | Compliance Workbench</title>
 <style>
-/* ── Reset & tokens ──────────────────────────────────────────────────────── */
+/* ── Reset & tokens ── */
 :root {
-  --bg:       #080a0f;
-  --surface:  #0f1117;
-  --surface2: #161923;
-  --border:   rgba(255,255,255,0.07);
-  --border2:  rgba(255,255,255,0.12);
-  --blue:     #3b82f6;
-  --purple:   #8b5cf6;
-  --green:    #22c55e;
-  --red:      #ef4444;
-  --amber:    #f59e0b;
-  --orange:   #f97316;
-  --text:     #e2e8f0;
-  --muted:    #64748b;
-  --grad:     linear-gradient(135deg, #3b82f6, #8b5cf6);
+  --bg:#080a0f; --surface:#0f1117; --surface2:#161923;
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.12);
+  --blue:#3b82f6; --purple:#8b5cf6; --green:#22c55e;
+  --red:#ef4444; --amber:#f59e0b; --orange:#f97316;
+  --text:#e2e8f0; --muted:#64748b;
+  --grad:linear-gradient(135deg,#3b82f6,#8b5cf6);
 }
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  font-size: 14px;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-h1,h2,h3,h4 { font-family: 'Outfit', sans-serif; }
-code, pre { font-family: 'JetBrains Mono', monospace; }
-
-/* ── Topbar ──────────────────────────────────────────────────────────────── */
-.topbar {
-  position: sticky; top: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 32px; height: 64px;
-  background: rgba(8,10,15,0.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-}
-
-.logo { display: flex; align-items: center; gap: 10px; }
-.logo-text {
-  font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 800;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* ── Stepper ─────────────────────────────────────────────────────────────── */
-.stepper {
-  display: flex; align-items: center; gap: 0;
-}
-.step {
-  display: flex; align-items: center; gap: 7px;
-  font-size: 12px; color: var(--muted); cursor: default;
-  transition: color .3s;
-}
-.step.active  { color: var(--text); }
-.step.done    { color: var(--green); }
-.step-num {
-  width: 24px; height: 24px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700;
-  background: var(--surface2); border: 1px solid var(--border2);
-  transition: all .3s;
-}
-.step.active .step-num { background: var(--blue); border-color: var(--blue); color: white; }
-.step.done   .step-num { background: var(--green); border-color: var(--green); color: white; }
-.step-label { font-weight: 500; }
-.step-line {
-  width: 32px; height: 1px;
-  background: var(--border2); margin: 0 4px;
-  transition: background .3s;
-}
-.step-line.done { background: var(--green); }
-
-/* ── Status pill ─────────────────────────────────────────────────────────── */
-.status-pill { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--muted); }
-.dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--green); box-shadow: 0 0 6px var(--green);
-  animation: blink 2s infinite;
-}
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-
-/* ── Wizard layout ───────────────────────────────────────────────────────── */
-.wizard {
-  max-width: 860px; margin: 0 auto;
-  padding: 48px 24px 80px;
-}
-.wizard-step { display: none; animation: stepIn .35s ease; }
-.wizard-step.active { display: block; }
-@keyframes stepIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
-
-/* ── Step hero ───────────────────────────────────────────────────────────── */
-.step-hero { text-align: center; margin-bottom: 40px; }
-.step-icon { font-size: 48px; margin-bottom: 16px; }
-.step-hero h1 { font-size: 32px; font-weight: 800; margin-bottom: 10px; }
-.step-hero p  { font-size: 16px; color: var(--muted); max-width: 480px; margin: 0 auto; line-height: 1.6; }
-
-/* ── Option cards (step 1) ───────────────────────────────────────────────── */
-.card-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 32px; }
-
-.option-card {
-  background: var(--surface); border: 2px solid var(--border);
-  border-radius: 16px; padding: 20px; cursor: pointer;
-  display: flex; flex-direction: column; gap: 12px;
-  transition: all .2s; position: relative;
-}
-.option-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-.option-card.selected { border-color: var(--blue); background: rgba(59,130,246,.06); }
-
-.option-icon { font-size: 28px; }
-.option-body strong { display: block; font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-.option-body p { font-size: 13px; color: var(--muted); line-height: 1.5; }
-.option-body code { font-size: 12px; background: rgba(255,255,255,.06); padding: 1px 5px; border-radius: 4px; color: var(--blue); }
-.option-tag {
-  display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px;
-  border-radius: 99px; margin-left: 6px; vertical-align: middle;
-}
-.option-tag.recommended { background: rgba(34,197,94,.15); color: var(--green); border: 1px solid rgba(34,197,94,.3); }
-.option-check {
-  position: absolute; top: 14px; right: 14px;
-  width: 20px; height: 20px; border-radius: 50%;
-  background: var(--blue); color: white;
-  font-size: 11px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity .2s;
-}
-.option-card.selected .option-check { opacity: 1; }
-
-/* ── Connect forms ───────────────────────────────────────────────────────── */
-.connect-form { margin-bottom: 32px; }
-.connect-form.hidden { display: none; }
-
-.form-row { display: flex; gap: 16px; margin-bottom: 16px; }
-.field { display: flex; flex-direction: column; gap: 8px; flex: 1; }
-.field-sm { flex: 0 0 140px; }
-.field label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
-.field input, .field textarea, .field select {
-  background: var(--surface2); border: 1px solid var(--border2);
-  color: var(--text); padding: 11px 14px; border-radius: 10px;
-  font-size: 14px; font-family: inherit; outline: none;
-  transition: border-color .2s, box-shadow .2s;
-}
-.field input:focus, .field textarea:focus {
-  border-color: var(--blue); box-shadow: 0 0 0 3px rgba(59,130,246,.15);
-}
-.field textarea { resize: vertical; min-height: 120px; }
-
-.info-box {
-  display: flex; gap: 10px; align-items: flex-start;
-  background: rgba(59,130,246,.08); border: 1px solid rgba(59,130,246,.2);
-  border-radius: 10px; padding: 12px 14px;
-  font-size: 13px; color: #93c5fd; line-height: 1.5;
-}
-
-/* ── Code block ──────────────────────────────────────────────────────────── */
-.code-block {
-  background: #0a0c12; border: 1px solid var(--border2);
-  border-radius: 12px; overflow: hidden;
-}
-.code-header {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 10px 16px; background: var(--surface2);
-  border-bottom: 1px solid var(--border); font-size: 12px; color: var(--muted);
-}
-.code-header button {
-  background: none; border: 1px solid var(--border2); color: var(--muted);
-  padding: 3px 10px; border-radius: 6px; cursor: pointer; font-size: 11px;
-  transition: all .2s;
-}
-.code-header button:hover { color: var(--text); border-color: var(--text); }
-pre { padding: 20px; font-size: 13px; line-height: 1.7; color: #a5b4fc; overflow-x: auto; }
-
-/* ── Framework grid (step 2) ─────────────────────────────────────────────── */
-.framework-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-bottom: 40px; }
-
-.framework-card {
-  background: var(--surface); border: 2px solid var(--border);
-  border-radius: 16px; padding: 24px; cursor: pointer;
-  transition: all .2s; position: relative;
-}
-.framework-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-.framework-card.selected { border-color: var(--purple); background: rgba(139,92,246,.06); }
-.framework-card.selected::after {
-  content: '✓'; position: absolute; top: 16px; right: 16px;
-  width: 22px; height: 22px; border-radius: 50%;
-  background: var(--purple); color: white;
-  font-size: 12px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center;
-}
-
-.fw-flag { font-size: 32px; margin-bottom: 12px; }
-.fw-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-.fw-jurisdiction { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
-.fw-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
-.fw-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-.fw-tag {
-  font-size: 11px; padding: 2px 8px; border-radius: 99px;
-  background: rgba(139,92,246,.12); color: #c4b5fd;
-  border: 1px solid rgba(139,92,246,.2);
-}
-
-/* ── Audit config card (step 3) ──────────────────────────────────────────── */
-.audit-config-card {
-  background: var(--surface); border: 1px solid var(--border2);
-  border-radius: 16px; padding: 24px; margin-bottom: 28px;
-}
-.config-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 0; border-bottom: 1px solid var(--border);
-}
-.config-row:last-child { border-bottom: none; }
-.config-label { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
-.config-value { font-size: 14px; font-weight: 500; }
-
-/* ── Live panel ──────────────────────────────────────────────────────────── */
-.live-panel {
-  background: var(--surface); border: 1px solid var(--border2);
-  border-radius: 16px; overflow: hidden; margin-bottom: 28px;
-}
-.live-header {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 18px; background: var(--surface2);
-  border-bottom: 1px solid var(--border);
-  font-size: 13px; font-weight: 600;
-}
-.live-count { margin-left: auto; font-size: 12px; color: var(--muted); font-weight: 400; }
-.pulse-dot {
-  width: 8px; height: 8px; border-radius: 50%; background: var(--green);
-  box-shadow: 0 0 8px var(--green); animation: blink 1s infinite;
-}
-.live-feed {
-  padding: 14px; max-height: 260px; overflow-y: auto;
-  display: flex; flex-direction: column; gap: 6px;
-}
-.log-entry {
-  display: flex; align-items: baseline; gap: 8px;
-  font-size: 12.5px; line-height: 1.5; padding: 7px 10px;
-  border-radius: 8px; background: rgba(255,255,255,.02);
-  animation: fadein .2s ease;
-}
-@keyframes fadein { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
-.log-entry .ts   { color: var(--muted); font-family: monospace; white-space: nowrap; font-size: 11px; }
-.log-entry .tag  { font-weight: 700; white-space: nowrap; font-size: 11px; }
-.log-entry.shield .tag   { color: var(--blue); }
-.log-entry.system .tag   { color: var(--muted); }
-.log-entry.pass .tag     { color: var(--green); }
-.log-entry.fail .tag     { color: var(--red); }
-.log-entry.warn .tag     { color: var(--amber); }
-
-/* ── Buttons ─────────────────────────────────────────────────────────────── */
-.step-actions {
-  display: flex; justify-content: flex-end; gap: 12px;
-  margin-top: 40px; padding-top: 24px;
-  border-top: 1px solid var(--border);
-}
-.btn-primary {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6); border: none; color: white;
-  padding: 12px 28px; border-radius: 10px; font-size: 14px; font-weight: 700;
-  cursor: pointer; transition: all .2s; font-family: inherit;
-}
-.btn-primary:hover { opacity: .9; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(59,130,246,.3); }
-.btn-primary:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
-.btn-ghost {
-  background: none; border: 1px solid var(--border2); color: var(--muted);
-  padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 600;
-  cursor: pointer; transition: all .2s; font-family: inherit;
-}
-.btn-ghost:hover { color: var(--text); border-color: var(--text); }
-.btn-run { padding: 12px 36px; font-size: 15px; }
-.btn-download { padding: 14px 36px; font-size: 15px; }
-
-/* ── Score banner (step 4) ───────────────────────────────────────────────── */
-.score-banner {
-  display: flex; align-items: center; gap: 40px;
-  background: var(--surface); border: 1px solid var(--border2);
-  border-radius: 20px; padding: 32px 40px; margin-bottom: 36px;
-}
-.score-circle {
-  width: 120px; height: 120px; border-radius: 50%;
-  border: 4px solid var(--blue);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: border-color .5s;
-}
-.score-circle.pass   { border-color: var(--green); }
-.score-circle.warn   { border-color: var(--amber); }
-.score-circle.fail   { border-color: var(--red); }
-.score-num   { font-family: 'Outfit', sans-serif; font-size: 34px; font-weight: 800; }
-.score-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
-.score-meta  { display: grid; grid-template-columns: repeat(2,1fr); gap: 20px; flex: 1; }
-.score-meta-item { display: flex; flex-direction: column; gap: 4px; }
-.meta-label  { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-.meta-value  { font-size: 18px; font-weight: 700; font-family: 'Outfit', sans-serif; }
-
-/* ── Results sections ────────────────────────────────────────────────────── */
-.results-section { margin-bottom: 36px; }
-.results-section-title {
-  font-size: 13px; font-weight: 700; color: var(--muted);
-  text-transform: uppercase; letter-spacing: .07em;
-  margin-bottom: 16px; padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-}
-
-/* ── Heatmap ─────────────────────────────────────────────────────────────── */
-.heatmap-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
-
-.heatmap-cell {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 16px;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  transition: all .2s; cursor: default;
-}
-.heatmap-cell.compliant     { border-color: rgba(34,197,94,.4);  background: rgba(34,197,94,.06); }
-.heatmap-cell.partial       { border-color: rgba(245,158,11,.4); background: rgba(245,158,11,.06); }
-.heatmap-cell.non-compliant { border-color: rgba(239,68,68,.4);  background: rgba(239,68,68,.06); }
-
-.heatmap-icon  { font-size: 22px; }
-.heatmap-id    { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
-.heatmap-name  { font-size: 12px; color: var(--text); text-align: center; }
-.heatmap-score { font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif; }
-.heatmap-cell.compliant     .heatmap-score { color: var(--green); }
-.heatmap-cell.partial       .heatmap-score { color: var(--amber); }
-.heatmap-cell.non-compliant .heatmap-score { color: var(--red); }
-.heatmap-cell.unknown       .heatmap-score { color: var(--muted); }
-
-/* ── Findings ────────────────────────────────────────────────────────────── */
-.finding-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 18px; margin-bottom: 12px;
-}
-.finding-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 10px;
-}
-.finding-title { font-size: 14px; font-weight: 600; }
-.finding-badge {
-  font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px;
-}
-.finding-badge.pass { background: rgba(34,197,94,.15); color: var(--green); }
-.finding-badge.warn { background: rgba(245,158,11,.15); color: var(--amber); }
-.finding-badge.fail { background: rgba(239,68,68,.15);  color: var(--red); }
-
-.stage-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-.stage-name { font-size: 12px; color: var(--muted); width: 100px; flex-shrink: 0; }
-.stage-track { flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,.06); overflow: hidden; }
-.stage-fill  { height: 100%; border-radius: 3px; transition: width .6s ease; }
-.stage-fill.pass { background: var(--green); }
-.stage-fill.warn { background: var(--amber); }
-.stage-fill.fail { background: var(--red); }
-.stage-pct { font-size: 12px; font-weight: 600; width: 36px; text-align: right; }
-
-/* ── Report preview (step 5) ─────────────────────────────────────────────── */
-.report-preview {
-  background: var(--surface); border: 1px solid var(--border2);
-  border-radius: 16px; padding: 32px; margin-bottom: 32px;
-  font-size: 13px; line-height: 1.8; color: var(--muted);
-  max-height: 420px; overflow-y: auto;
-}
-.report-preview h2 { font-size: 18px; color: var(--text); margin-bottom: 8px; margin-top: 20px; }
-.report-preview h2:first-child { margin-top: 0; }
-.report-preview p  { margin-bottom: 10px; }
-.report-preview .rp-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 0; border-bottom: 1px solid var(--border);
-}
-.report-preview .rp-pass { color: var(--green); font-weight: 700; }
-.report-preview .rp-warn { color: var(--amber); font-weight: 700; }
-.report-preview .rp-fail { color: var(--red);   font-weight: 700; }
-
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh;overflow-x:hidden}
+/* ── Topbar ── */
+.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:60px;background:rgba(8,10,15,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-text{font-size:20px;font-weight:800;letter-spacing:-0.5px;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.status-pill{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .3s,box-shadow .3s}
+.dot.running{background:var(--blue);box-shadow:0 0 6px var(--blue);animation:blink 1s infinite}
+.dot.complete{background:var(--green);box-shadow:0 0 6px var(--green)}
+.dot.error{background:var(--red);box-shadow:0 0 6px var(--red)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+/* ── Layout ── */
+.layout{display:grid;grid-template-columns:290px 1fr;height:calc(100vh - 60px);overflow:hidden}
+.left-panel{border-right:1px solid var(--border);padding:20px 18px;display:flex;flex-direction:column;gap:20px;overflow-y:auto;background:var(--surface)}
+.right-panel{display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+/* ── Section label ── */
+.section-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+/* ── Stage selector ── */
+.stage-list{display:flex;flex-direction:column;gap:5px}
+.stage-option{display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border-radius:9px;border:1px solid var(--border);cursor:pointer;transition:all .15s;background:transparent;width:100%;text-align:left}
+.stage-option:hover{border-color:var(--border2);background:rgba(255,255,255,.02)}
+.stage-option.selected{border-color:var(--blue);background:rgba(59,130,246,.07)}
+.stage-option input[type=radio]{margin-top:2px;accent-color:var(--blue);flex-shrink:0;cursor:pointer}
+.stage-option-body{display:flex;flex-direction:column;gap:2px}
+.stage-name{font-size:13px;font-weight:600}
+.stage-checks{font-size:11px;color:var(--muted);line-height:1.4}
+/* ── Run button ── */
+.btn-run{width:100%;padding:11px;background:var(--grad);border:none;color:white;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-run:hover:not(:disabled){opacity:.9;transform:translateY(-1px);box-shadow:0 6px 20px rgba(59,130,246,.3)}
+.btn-run:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* ── Score banner ── */
+.score-banner{background:var(--surface2);border:1px solid var(--border2);border-radius:13px;padding:16px 14px;display:flex;flex-direction:column;gap:12px}
+.score-top{display:flex;align-items:center;gap:12px}
+.score-circle{width:68px;height:68px;border-radius:50%;border:3px solid var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .4s}
+.score-circle.low{border-color:var(--green)}.score-circle.medium{border-color:var(--amber)}.score-circle.high{border-color:var(--orange)}.score-circle.critical{border-color:var(--red)}
+.score-num{font-size:20px;font-weight:800;font-family:monospace;line-height:1}
+.score-pct{font-size:10px;color:var(--muted)}
+.score-right{display:flex;flex-direction:column;gap:4px}
+.risk-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px}
+.risk-badge.low{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.risk-badge.medium{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
+.risk-badge.high{background:rgba(249,115,22,.15);color:var(--orange);border:1px solid rgba(249,115,22,.3)}
+.risk-badge.critical{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+.risk-badge.unknown{background:rgba(100,116,139,.15);color:var(--muted);border:1px solid rgba(100,116,139,.3)}
+.score-label-text{font-size:11px;color:var(--muted)}
+.score-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-item{display:flex;flex-direction:column;gap:2px}
+.stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.stat-value{font-size:15px;font-weight:700;font-family:monospace}
+.stat-value.pass-color{color:var(--green)}.stat-value.fail-color{color:var(--red)}
+/* ── Live feed ── */
+.live-section{border-bottom:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;max-height:220px}
+.live-header{display:flex;align-items:center;gap:8px;padding:9px 16px;background:var(--surface);border-bottom:1px solid var(--border);font-size:12px;font-weight:600;flex-shrink:0}
+.pulse-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 1s infinite}
+.live-count{margin-left:auto;font-size:11px;color:var(--muted);font-weight:400}
+.live-feed{padding:8px 12px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:3px}
+.log-entry{display:flex;align-items:baseline;gap:7px;font-size:12px;line-height:1.5;padding:4px 7px;border-radius:5px;background:rgba(255,255,255,.02);animation:fadein .2s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+.log-ts{color:var(--muted);font-family:monospace;white-space:nowrap;font-size:10px;flex-shrink:0}
+.log-tag{font-weight:700;white-space:nowrap;font-size:11px;flex-shrink:0}
+.log-msg{color:var(--muted);font-size:12px}
+.log-entry.pass .log-tag{color:var(--green)}.log-entry.fail .log-tag{color:var(--red)}
+.log-entry.skipped .log-tag{color:var(--muted)}.log-entry.error .log-tag{color:var(--amber)}
+/* ── Cards section ── */
+.cards-section{flex:1;overflow-y:auto;padding:16px}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+/* ── Empty state ── */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;color:var(--muted);text-align:center;padding:40px}
+.empty-icon{font-size:48px;opacity:.5}
+.empty-title{font-size:18px;font-weight:700;color:var(--text)}
+.empty-sub{font-size:13px;line-height:1.6;max-width:340px}
+/* ── Article card ── */
+.article-card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px;display:flex;flex-direction:column;gap:9px;transition:border-color .2s;animation:fadein .25s ease;cursor:pointer}
+.article-card:hover{border-color:var(--border2);background:rgba(255,255,255,0.02)}
+.article-card.pass{border-color:rgba(34,197,94,.35)}.article-card.fail{border-color:rgba(239,68,68,.35)}.article-card.skipped{border-color:var(--border);opacity:.7}
+.card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.card-title{font-size:13px;font-weight:600;line-height:1.3}
+.card-article-id{font-size:10px;color:var(--muted);margin-top:2px}
+.status-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.status-badge.pass{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.status-badge.fail{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+.status-badge.skipped{background:rgba(100,116,139,.15);color:var(--muted);border:1px solid rgba(100,116,139,.3)}
+.card-scores{display:flex;gap:14px}
+.card-score-item{display:flex;flex-direction:column;gap:2px}
+.card-score-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.card-score-value{font-size:15px;font-weight:700;font-family:monospace}
+.card-score-value.pass-color{color:var(--green)}.card-score-value.fail-color{color:var(--red)}.card-score-value.muted-color{color:var(--muted)}
+.card-hint{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:7px;padding:9px 11px;font-size:12px;color:#fca5a5;line-height:1.5}
+.card-hint-label{font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.btn-copy{align-self:flex-start;background:none;border:1px solid rgba(239,68,68,.3);color:var(--red);padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s}
+.btn-copy:hover{background:rgba(239,68,68,.1)}.btn-copy.copied{border-color:var(--green);color:var(--green)}
+/* ── Responsive ── */
+@media(max-width:1100px){.layout{grid-template-columns:240px 1fr}}
+@media(min-width:1800px){.layout{grid-template-columns:320px 1fr}}
+/* ── Scrollbars ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:99px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.2)}
+* { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent; }
+/* ── Modal ── */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;animation:fadein .2s ease}
+.modal-overlay.show{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:16px;max-width:600px;width:100%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.5);animation:slideup .25s ease}
+@keyframes slideup{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.modal-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.modal-title{font-size:18px;font-weight:700;line-height:1.3}
+.modal-subtitle{font-size:12px;color:var(--muted);margin-top:4px}
+.modal-close{background:none;border:none;color:var(--muted);font-size:24px;cursor:pointer;padding:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all .15s;flex-shrink:0}
+.modal-close:hover{background:rgba(255,255,255,0.05);color:var(--text)}
+.modal-body{padding:20px 24px}
+.modal-section{margin-bottom:20px}
+.modal-section:last-child{margin-bottom:0}
+.modal-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.modal-text{font-size:14px;line-height:1.6;color:var(--text)}
+.modal-citation{font-size:12px;color:var(--blue);font-family:monospace;background:rgba(59,130,246,0.08);padding:8px 12px;border-radius:6px;border:1px solid rgba(59,130,246,0.2)}
+/* ── Framework selector ── */
+.framework-list{display:flex;flex-direction:column;gap:4px}
+.framework-option{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 11px;border-radius:9px;border:1px solid var(--border);cursor:pointer;transition:all .15s;background:transparent;width:100%;text-align:left}
+.framework-option:hover:not(.disabled){border-color:var(--border2);background:rgba(255,255,255,.02)}
+.framework-option.selected{border-color:var(--purple);background:rgba(139,92,246,.07)}
+.framework-option.disabled{opacity:.45;cursor:not-allowed}
+.framework-option input[type=radio]{accent-color:var(--purple);flex-shrink:0;cursor:pointer}
+.framework-option.disabled input[type=radio]{cursor:not-allowed}
+.framework-name{font-size:12px;font-weight:600}
+.framework-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.framework-badge.active{background:rgba(139,92,246,.15);color:var(--purple);border:1px solid rgba(139,92,246,.3)}
+.framework-badge.soon{background:rgba(100,116,139,.12);color:var(--muted);border:1px solid rgba(100,116,139,.2)}
 </style>
 </head>
 <body>
+
+<!-- ── Topbar ── -->
 <nav class="topbar">
-    <div class="logo">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="url(#lg)"/><path d="M8 14h4l2-5 4 10 2-5h4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="lg" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs></svg>
-      <span class="logo-text">RaiFlow</span>
+  <div class="logo">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="8" fill="url(#lg)"/>
+      <path d="M8 14h4l2-5 4 10 2-5h4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <defs><linearGradient id="lg" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+    </svg>
+    <span class="logo-text">RaiFlow</span>
+  </div>
+  <div class="status-pill">
+    <span class="dot" id="status-dot"></span>
+    <span id="status-text">Idle</span>
+    <button id="btn-download" onclick="downloadReport()" style="display:none;margin-left:14px;background:none;border:1px solid var(--border2);color:var(--muted);padding:4px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">⬇ Download Report</button>
+  </div>
+</nav>
+
+<!-- ── Main layout ── -->
+<div class="layout">
+
+  <!-- LEFT PANEL -->
+  <aside class="left-panel">
+
+    <!-- Framework selector -->
+    <div>
+      <div class="section-label">Regulatory Framework</div>
+      <div class="framework-list" id="framework-list">
+        <label class="framework-option selected" id="fw-eu_ai_act">
+          <input type="radio" name="framework" value="eu_ai_act" checked />
+          <span class="framework-name">EU AI Act</span>
+          <span class="framework-badge active">Active</span>
+        </label>
+        <label class="framework-option disabled" id="fw-nist_ai_rmf" title="Coming soon">
+          <input type="radio" name="framework" value="nist_ai_rmf" disabled />
+          <span class="framework-name">NIST AI RMF</span>
+          <span class="framework-badge soon">Coming soon</span>
+        </label>
+        <label class="framework-option disabled" id="fw-iso_42001" title="Coming soon">
+          <input type="radio" name="framework" value="iso_42001" disabled />
+          <span class="framework-name">ISO 42001</span>
+          <span class="framework-badge soon">Coming soon</span>
+        </label>
+      </div>
     </div>
-    <div class="stepper" id="stepper">
-      <div class="step active" data-step="1"><span class="step-num">1</span><span class="step-label">Connect</span></div>
-      <div class="step-line"></div>
-      <div class="step" data-step="2"><span class="step-num">2</span><span class="step-label">Framework</span></div>
-      <div class="step-line"></div>
-      <div class="step" data-step="3"><span class="step-num">3</span><span class="step-label">Run Audit</span></div>
-      <div class="step-line"></div>
-      <div class="step" data-step="4"><span class="step-num">4</span><span class="step-label">Results</span></div>
-      <div class="step-line"></div>
-      <div class="step" data-step="5"><span class="step-num">5</span><span class="step-label">Report</span></div>
+
+    <!-- Stage selector -->
+    <div>
+      <div class="section-label">Pipeline Stage</div>
+      <div class="stage-list" id="stage-list">
+        <label class="stage-option" id="opt-pre-commit">
+          <input type="radio" name="stage" value="pre-commit" />
+          <div class="stage-option-body">
+            <span class="stage-name">pre-commit</span>
+            <span class="stage-checks" id="checks-pre-commit"></span>
+          </div>
+        </label>
+        <label class="stage-option selected" id="opt-ci">
+          <input type="radio" name="stage" value="ci" checked />
+          <div class="stage-option-body">
+            <span class="stage-name">ci</span>
+            <span class="stage-checks" id="checks-ci"></span>
+          </div>
+        </label>
+        <label class="stage-option" id="opt-pre-deploy">
+          <input type="radio" name="stage" value="pre-deploy" />
+          <div class="stage-option-body">
+            <span class="stage-name">pre-deploy</span>
+            <span class="stage-checks" id="checks-pre-deploy"></span>
+          </div>
+        </label>
+        <label class="stage-option" id="opt-post-deploy">
+          <input type="radio" name="stage" value="post-deploy" />
+          <div class="stage-option-body">
+            <span class="stage-name">post-deploy</span>
+            <span class="stage-checks" id="checks-post-deploy"></span>
+          </div>
+        </label>
+      </div>
     </div>
-    <div class="status-pill">
-      <span class="dot" id="status-dot"></span>
-      <span id="status-text">Connecting...</span>
-    </div>
-  </nav>
 
-  <main class="wizard">
+    <!-- Run Checks button -->
+    <button class="btn-run" id="btn-run" onclick="runChecks()">
+      <span class="spinner" id="run-spinner"></span>
+      <span id="btn-run-label">▶ Run Checks</span>
+    </button>
 
-    <section class="wizard-step active" id="step-1">
-      <div class="step-hero">
-        <div class="step-icon">🔌</div>
-        <h1>Connect your AI app</h1>
-        <p>Tell RaiFlow where your RAG, LLM, or Agent app is running so we can audit it.</p>
-      </div>
-      <div class="card-grid">
-        <div class="option-card selected" id="opt-interceptor" onclick="selectOption('interceptor')">
-          <div class="option-icon">🛡️</div>
-          <div class="option-body">
-            <strong>HTTP Interceptor <span class="option-tag recommended">Recommended</span></strong>
-            <p>Point RaiFlow at your running app's URL. Zero code changes needed.</p>
-          </div>
-          <div class="option-check">✓</div>
-        </div>
-        <div class="option-card" id="opt-decorator" onclick="selectOption('decorator')">
-          <div class="option-icon">🐍</div>
-          <div class="option-body">
-            <strong>Python Decorator</strong>
-            <p>Add <code>@shield</code> to your RAG function for deep LLM-level auditing.</p>
-          </div>
-          <div class="option-check">✓</div>
-        </div>
-        <div class="option-card" id="opt-direct" onclick="selectOption('direct')">
-          <div class="option-icon">📋</div>
-          <div class="option-body">
-            <strong>Paste a Response</strong>
-            <p>Already have a response? Paste it directly for instant compliance check.</p>
-          </div>
-          <div class="option-check">✓</div>
-        </div>
-      </div>
-
-      <div class="connect-form" id="form-interceptor">
-        <div class="form-row">
-          <div class="field">
-            <label for="targetUrl">Your app's URL</label>
-            <input type="text" id="targetUrl" placeholder="http://localhost:7860" value="http://localhost:7860" />
-          </div>
-          <div class="field field-sm">
-            <label for="interceptorPort">Interceptor port</label>
-            <input type="number" id="interceptorPort" value="8080" />
-          </div>
-        </div>
-        <div class="info-box">
-          <span>💡</span>
-          <span>Start your app first, then RaiFlow will proxy all traffic through port <strong id="portPreview">8080</strong> and audit every response automatically.</span>
-        </div>
-      </div>
-
-      <div class="connect-form hidden" id="form-decorator">
-        <div class="code-block">
-          <div class="code-header"><span>Python</span><button onclick="copyCode('decorator-code')">Copy</button></div>
-          <pre id="decorator-code">from raiflow import shield
-
-@shield(framework="eu_ai_act")
-def my_rag_pipeline(query: str):
-    return {"answer": "...", "context": "..."}
-
-result = my_rag_pipeline("your query")</pre>
-        </div>
-      </div>
-
-      <div class="connect-form hidden" id="form-direct">
-        <div class="field">
-          <label for="directPaste">Paste your RAG response (JSON)</label>
-          <textarea id="directPaste" rows="6" placeholder='{"question": "...", "context": "...", "answer": "..."}'></textarea>
-        </div>
-      </div>
-
-      <div class="step-actions">
-        <button class="btn-primary" onclick="goStep(2)">Continue →</button>
-      </div>
-    </section>
-
-    <section class="wizard-step" id="step-2">
-      <div class="step-hero">
-        <div class="step-icon">📜</div>
-        <h1>Choose a regulatory framework</h1>
-        <p>Select which standard you want to audit your AI system against.</p>
-      </div>
-      <div class="framework-grid" id="framework-grid"></div>
-      <div class="step-actions">
-        <button class="btn-ghost" onclick="goStep(1)">← Back</button>
-        <button class="btn-primary" onclick="goStep(3)">Continue →</button>
-      </div>
-    </section>
-
-    <section class="wizard-step" id="step-3">
-      <div class="step-hero">
-        <div class="step-icon">🚀</div>
-        <h1>Run the compliance audit</h1>
-        <p>RaiFlow will evaluate your app's responses against the selected framework.</p>
-      </div>
-      <div class="audit-config-card">
-        <div class="config-row"><span class="config-label">Target</span><span class="config-value" id="cfg-target">—</span></div>
-        <div class="config-row"><span class="config-label">Framework</span><span class="config-value" id="cfg-framework">—</span></div>
-        <div class="config-row"><span class="config-label">Mode</span><span class="config-value" id="cfg-mode">—</span></div>
-        <div class="config-row"><span class="config-label">Checks</span><span class="config-value">PII · Toxicity · Faithfulness · EU AI Act Articles 9–14</span></div>
-      </div>
-      <div class="live-panel" id="live-panel" style="display:none">
-        <div class="live-header">
-          <span class="pulse-dot"></span>
-          <span>Live audit running...</span>
-          <span class="live-count">Events: <strong id="live-count">0</strong></span>
-        </div>
-        <div class="live-feed" id="live-feed"></div>
-      </div>
-      <div class="step-actions">
-        <button class="btn-ghost" onclick="goStep(2)">← Back</button>
-        <button class="btn-primary btn-run" id="btnRun" onclick="startAudit()">▶ Start Audit</button>
-      </div>
-    </section>
-
-    <section class="wizard-step" id="step-4">
-      <div class="step-hero">
-        <div class="step-icon">📊</div>
-        <h1>Compliance results</h1>
-        <p>Audit complete — here's how your system scored.</p>
-      </div>
-      <div class="score-banner">
+    <!-- Score banner -->
+    <div class="score-banner" id="score-banner">
+      <div class="score-top">
         <div class="score-circle" id="score-circle">
           <span class="score-num" id="score-num">--</span>
-          <span class="score-label">Overall</span>
+          <span class="score-pct">%</span>
         </div>
-        <div class="score-meta">
-          <div class="score-meta-item"><span class="meta-label">Risk Level</span><span class="meta-value" id="risk-level">--</span></div>
-          <div class="score-meta-item"><span class="meta-label">Checks Run</span><span class="meta-value" id="checks-run">--</span></div>
-          <div class="score-meta-item"><span class="meta-label">Framework</span><span class="meta-value" id="result-framework">--</span></div>
-          <div class="score-meta-item"><span class="meta-label">Violations</span><span class="meta-value" id="violations-count">--</span></div>
+        <div class="score-right">
+          <span class="risk-badge unknown" id="risk-badge">Unknown</span>
+          <span class="score-label-text">Risk Level</span>
         </div>
       </div>
-      <div class="results-section">
-        <h3 class="results-section-title">Article-by-Article Breakdown</h3>
-        <div class="heatmap-grid" id="heatmap"></div>
+      <div class="score-stats">
+        <div class="stat-item">
+          <span class="stat-label">Checks Run</span>
+          <span class="stat-value" id="stat-checks">--</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Violations</span>
+          <span class="stat-value fail-color" id="stat-violations">--</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Passing</span>
+          <span class="stat-value pass-color" id="stat-passing">--</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Failing</span>
+          <span class="stat-value fail-color" id="stat-failing">--</span>
+        </div>
       </div>
-      <div class="results-section">
-        <h3 class="results-section-title">Detailed Findings</h3>
-        <div id="findings"></div>
-      </div>
-      <div class="step-actions">
-        <button class="btn-ghost" onclick="goStep(3)">← Run Again</button>
-        <button class="btn-primary" onclick="goStep(5)">View Report →</button>
-      </div>
-    </section>
+    </div>
 
-    <section class="wizard-step" id="step-5">
-      <div class="step-hero">
-        <div class="step-icon">📄</div>
-        <h1>Your compliance report is ready</h1>
-        <p>Download a full PDF report to share with your legal or engineering team.</p>
+  </aside>
+
+  <!-- RIGHT PANEL -->
+  <main class="right-panel">
+
+    <!-- Live feed -->
+    <div class="live-section">
+      <div class="live-header">
+        <span class="pulse-dot"></span>
+        <span>Live Feed</span>
+        <span id="project-name-label" style="font-size:11px;color:var(--muted);font-weight:400;margin-left:4px"></span>
+        <span class="live-count">Events: <strong id="live-count">0</strong></span>
       </div>
-      <div class="report-preview" id="report-preview"></div>
-      <div class="step-actions">
-        <button class="btn-ghost" onclick="goStep(4)">← Back to Results</button>
-        <button class="btn-primary btn-download" onclick="downloadReport()">⬇ Download PDF Report</button>
+      <div class="live-feed" id="live-feed"></div>
+    </div>
+
+    <!-- Cards / empty state -->
+    <div class="cards-section" id="cards-section">
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">🛡️</div>
+        <div class="empty-title">Ready to run compliance checks</div>
+        <div class="empty-sub">Select a pipeline stage on the left and click <strong>Run Checks</strong> to start streaming results.</div>
       </div>
-    </section>
+      <div class="cards-grid" id="cards-grid" style="display:none"></div>
+    </div>
 
   </main>
+</div>
+
+<!-- ── Modal ── -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-title"></div>
+        <div class="modal-subtitle" id="modal-subtitle"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-label">What this check tests</div>
+        <div class="modal-text" id="modal-description"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-label">Regulatory citation</div>
+        <div class="modal-citation" id="modal-citation"></div>
+      </div>
+      <div class="modal-section" id="modal-target-section">
+        <div class="modal-label">Applies to</div>
+        <div class="modal-text" id="modal-target"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-﻿'use strict';
+'use strict';
+
+// ── Stage-to-checks mapping ───────────────────────────────────────────────────
+const STAGE_CHECKS = {
+  'pre-commit':  ['Banned Model Scan'],
+  'ci':          ['Banned Model Scan','Transparency','Risk Mgmt','Human Oversight','Logging','Bias Detection','Robustness'],
+  'pre-deploy':  ['Banned Model Scan','Transparency','Risk Mgmt','Human Oversight','Logging','Bias Detection','Robustness'],
+  'post-deploy': ['Banned Model Scan','Transparency','Risk Mgmt','Human Oversight','Logging'],
+};
+
+// ── Check details mapping (from eu_ai_act.yaml) ───────────────────────────────
+const CHECK_DETAILS = {
+  'BAN-1': {
+    title: 'Banned Model Scan',
+    article: 'Banned Models',
+    description: 'Verifies that the AI model identifier does not match any entries in the banned models list. This check ensures compliance with organizational policies prohibiting specific model types or versions.',
+    citation: 'Internal Policy',
+    target: 'Provider'
+  },
+  'ART13-1': {
+    title: 'Transparency by Design',
+    article: 'Article 13',
+    description: 'Design and develop high-risk AI systems to ensure operation is sufficiently transparent to enable deployers to interpret output.',
+    citation: 'REGULATION (EU) 2024/1689 Article 13',
+    target: 'Provider'
+  },
+  'ART9-1': {
+    title: 'Risk Management System Establishment',
+    article: 'Article 9',
+    description: 'Establish, document, implement, and maintain a risk management system for high-risk AI systems.',
+    citation: 'REGULATION (EU) 2024/1689 Article 9',
+    target: 'Provider'
+  },
+  'ART14-1': {
+    title: 'Human Oversight by Design',
+    article: 'Article 14',
+    description: 'Design and develop high-risk AI systems with appropriate human-machine interface tools for effective human oversight.',
+    citation: 'REGULATION (EU) 2024/1689 Article 14',
+    target: 'Provider'
+  },
+  'ART12-1': {
+    title: 'Automatic Event Recording',
+    article: 'Article 12',
+    description: 'Technically enable automatic recording of events (logs) over the lifetime of the high-risk AI system.',
+    citation: 'REGULATION (EU) 2024/1689 Article 12',
+    target: 'High-risk AI systems'
+  },
+  'ART10-3': {
+    title: 'Bias Detection and Mitigation',
+    article: 'Article 10',
+    description: 'Examine datasets for biases that could affect health, safety, or fundamental rights, and implement mitigation measures.',
+    citation: 'REGULATION (EU) 2024/1689 Article 10',
+    target: 'Provider'
+  },
+  'ART10-4': {
+    title: 'Robustness/Toxicity Check',
+    article: 'Article 10',
+    description: 'Apply appropriate data preparation operations including annotation, labeling, cleaning, enrichment, and aggregation. Tests model outputs against red-team prompts to detect toxic or harmful responses.',
+    citation: 'REGULATION (EU) 2024/1689 Article 10',
+    target: 'Provider'
+  }
+};
 
 // ── State ─────────────────────────────────────────────────────────────────────
 const state = {
-  step: 1, mode: 'interceptor',
-  framework: null, frameworkName: null,
-  targetUrl: 'http://localhost:7860', port: 8080,
-  auditLogs: [], lastCount: 0,
-  pollTimer: null, auditDone: false, reportData: null,
+  status: 'idle',       // idle | running | complete | error
+  selectedStage: 'ci',
+  selectedFramework: 'eu_ai_act',
+  passCount: 0,
+  failCount: 0,
+  skipCount: 0,
+  liveCount: 0,
+  cardOrder: [],        // rule_ids in arrival order
+  cards: {},            // rule_id -> card data
+  es: null,             // EventSource
 };
 
-const FRAMEWORKS = [
-  { id: 'eu_ai_act', name: 'EU AI Act', flag: '🇪🇺',
-    jurisdiction: 'European Union · Regulation (EU) 2024/1689',
-    desc: 'Covers risk management, data governance, transparency, and human oversight for high-risk AI systems.',
-    tags: ['Risk Mgmt', 'Data Gov', 'Transparency', 'Human Oversight'] },
-  { id: 'nist_ai_rmf', name: 'NIST AI RMF', flag: '🇺🇸',
-    jurisdiction: 'United States · NIST AI RMF 1.0',
-    desc: 'Framework for managing AI risks across four core functions: Govern, Map, Measure, and Manage.',
-    tags: ['Faithfulness', 'Safety', 'Privacy', 'Attribution'] },
-];
-
-const EU_ARTICLES = [
-  { id: 'Article 9',  name: 'Risk Management',   icon: '⚠️' },
-  { id: 'Article 10', name: 'Data Governance',    icon: '📊' },
-  { id: 'Article 11', name: 'Technical Docs',     icon: '📋' },
-  { id: 'Article 12', name: 'Record Keeping',     icon: '📝' },
-  { id: 'Article 13', name: 'Transparency',       icon: '🔍' },
-  { id: 'Article 14', name: 'Human Oversight',    icon: '👥' },
-];
-
-// ── Step navigation ───────────────────────────────────────────────────────────
-function goStep(n) {
-  if (n === 2 && !validateStep1()) return;
-  if (n === 3 && !validateStep2()) return;
-  document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
-  document.getElementById('step-' + n).classList.add('active');
-  document.querySelectorAll('.step').forEach(s => {
-    const sn = parseInt(s.dataset.step);
-    s.classList.toggle('active', sn === n);
-    s.classList.toggle('done',   sn < n);
-  });
-  document.querySelectorAll('.step-line').forEach((l, i) => l.classList.toggle('done', i < n - 1));
-  state.step = n;
-  if (n === 2) renderFrameworks();
-  if (n === 3) populateConfig();
-  if (n === 5) renderReportPreview();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// ── Step 1 ────────────────────────────────────────────────────────────────────
-function selectOption(mode) {
-  state.mode = mode;
-  document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
-  document.getElementById('opt-' + mode).classList.add('selected');
-  document.querySelectorAll('.connect-form').forEach(f => f.classList.add('hidden'));
-  document.getElementById('form-' + mode).classList.remove('hidden');
-}
-
-function validateStep1() {
-  if (state.mode === 'interceptor') {
-    const url = document.getElementById('targetUrl').value.trim();
-    if (!url) { alert('Please enter your app URL.'); return false; }
-    state.targetUrl = url;
-    state.port = parseInt(document.getElementById('interceptorPort').value) || 8080;
+// ── Init stage selector labels ────────────────────────────────────────────────
+(function initStageLabels() {
+  for (const [stage, checks] of Object.entries(STAGE_CHECKS)) {
+    const el = document.getElementById('checks-' + stage);
+    if (el) el.textContent = checks.join(', ');
   }
-  return true;
-}
+  // Highlight default
+  document.getElementById('opt-ci').classList.add('selected');
+})();
 
-document.getElementById('interceptorPort').addEventListener('input', function(e) {
-  document.getElementById('portPreview').textContent = e.target.value || '8080';
+// ── Stage radio change ────────────────────────────────────────────────────────
+document.querySelectorAll('input[name=stage]').forEach(function(radio) {
+  radio.addEventListener('change', function() {
+    state.selectedStage = this.value;
+    document.querySelectorAll('.stage-option').forEach(function(el) {
+      el.classList.remove('selected');
+    });
+    document.getElementById('opt-' + state.selectedStage).classList.add('selected');
+  });
 });
 
-function copyCode(id) {
-  const text = document.getElementById(id).textContent;
-  navigator.clipboard.writeText(text).then(function() {
-    const btn = document.getElementById(id).closest('.code-block').querySelector('button');
-    btn.textContent = 'Copied!';
-    setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
+// ── Framework radio change ────────────────────────────────────────────────────
+document.querySelectorAll('input[name=framework]').forEach(function(radio) {
+  radio.addEventListener('change', function() {
+    state.selectedFramework = this.value;
+    document.querySelectorAll('.framework-option:not(.disabled)').forEach(function(el) {
+      el.classList.remove('selected');
+    });
+    document.getElementById('fw-' + state.selectedFramework).classList.add('selected');
+  });
+});
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function ts() {
+  return new Date().toLocaleTimeString('en-US', {hour12: false, hour:'2-digit', minute:'2-digit', second:'2-digit'});
+}
+
+function setStatus(s, label) {
+  state.status = s;
+  const dot = document.getElementById('status-dot');
+  const txt = document.getElementById('status-text');
+  dot.className = 'dot ' + s;
+  txt.textContent = label || s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+function setRunning(running) {
+  const btn = document.getElementById('btn-run');
+  const spinner = document.getElementById('run-spinner');
+  const lbl = document.getElementById('btn-run-label');
+  const radios = document.querySelectorAll('input[name=stage]');
+  btn.disabled = running;
+  spinner.style.display = running ? 'block' : 'none';
+  lbl.textContent = running ? 'Running…' : '▶ Run Checks';
+  radios.forEach(function(r) { r.disabled = running; });
+  document.querySelectorAll('.stage-option').forEach(function(el) {
+    el.style.pointerEvents = running ? 'none' : '';
+    el.style.opacity = running ? '0.6' : '';
+  });
+  // Also lock framework selector while running
+  document.querySelectorAll('.framework-option:not(.disabled)').forEach(function(el) {
+    el.style.pointerEvents = running ? 'none' : '';
+    el.style.opacity = running ? '0.6' : '';
   });
 }
 
-// ── Step 2 ────────────────────────────────────────────────────────────────────
-function renderFrameworks() {
-  document.getElementById('framework-grid').innerHTML = FRAMEWORKS.map(function(fw) {
-    return '<div class="framework-card ' + (state.framework === fw.id ? 'selected' : '') + '" onclick="selectFramework(\'' + fw.id + '\',\'' + fw.name + '\')">' +
-      '<div class="fw-flag">' + fw.flag + '</div>' +
-      '<div class="fw-name">' + fw.name + '</div>' +
-      '<div class="fw-jurisdiction">' + fw.jurisdiction + '</div>' +
-      '<div class="fw-desc">' + fw.desc + '</div>' +
-      '<div class="fw-tags">' + fw.tags.map(function(t) { return '<span class="fw-tag">' + t + '</span>'; }).join('') + '</div>' +
-      '</div>';
-  }).join('');
-}
-
-function selectFramework(id, name) {
-  state.framework = id; state.frameworkName = name;
-  document.querySelectorAll('.framework-card').forEach(function(c) { c.classList.remove('selected'); });
-  document.querySelectorAll('.framework-card').forEach(function(c) {
-    if (c.querySelector('.fw-name') && c.querySelector('.fw-name').textContent === name) {
-      c.classList.add('selected');
-    }
-  });
-}
-
-function validateStep2() {
-  if (!state.framework) { alert('Please select a compliance framework.'); return false; }
-  return true;
-}
-
-// ── Step 3 ────────────────────────────────────────────────────────────────────
-function populateConfig() {
-  var modeLabel = state.mode === 'interceptor' ? 'HTTP Interceptor → proxy on port ' + state.port
-    : state.mode === 'decorator' ? 'Python @shield decorator' : 'Direct response paste';
-  document.getElementById('cfg-target').textContent =
-    state.mode === 'interceptor' ? state.targetUrl : state.mode === 'direct' ? 'Pasted response' : 'Your decorated function';
-  document.getElementById('cfg-framework').textContent = state.frameworkName;
-  document.getElementById('cfg-mode').textContent = modeLabel;
-}
-
-function startAudit() {
-  var btn = document.getElementById('btnRun');
-  btn.disabled = true; btn.textContent = '⏳ Auditing…';
-  var livePanel = document.getElementById('live-panel');
-  livePanel.style.display = 'block';
-  document.getElementById('live-feed').innerHTML = '';
-  document.getElementById('live-count').textContent = '0';
-  state.auditDone = false;
-  addLiveLog('system', 'Audit started — Framework: ' + state.frameworkName);
-  if (state.mode === 'direct') { runDirectAudit(); } else { runInterceptorAudit(); }
-}
-
-function runDirectAudit() {
-  var raw = (document.getElementById('directPaste') || {}).value || '';
-  raw = raw.trim();
-  if (!raw) { addLiveLog('fail', 'No response pasted.'); resetRunBtn(); return; }
-  var data;
-  try { data = JSON.parse(raw); } catch(e) { addLiveLog('fail', 'Invalid JSON.'); resetRunBtn(); return; }
-  addLiveLog('shield', 'Running PII check…');
-  setTimeout(function() { addLiveLog('shield', 'Running toxicity check…'); }, 400);
-  setTimeout(function() { addLiveLog('shield', 'Running faithfulness check…'); }, 800);
-  setTimeout(function() {
-    state.auditLogs = [buildSyntheticEvent(data)];
-    state.auditDone = true;
-    addLiveLog('pass', 'Audit complete');
-    finishAudit();
-  }, 1400);
-}
-
-function logEvent(e) {
-  var s = (e.audit_fast || {}).scores || {};
-  var pii   = s.pii_clean    === 1.0 ? '✅' : '❌ PII';
-  var tox   = s.toxicity_safe === 1.0 ? '✅' : '❌ Toxic';
-  var faith = s.faithfulness != null ? ' Faith:' + Math.round(s.faithfulness * 100) + '%' : '';
-  var ts    = (e.timestamp || '').split('T')[1] || '';
-  addLiveLog('shield', '[' + ts.slice(0,8) + '] ' + e.function + ' | PII:' + pii + ' Tox:' + tox + faith);
-}
-
-function runInterceptorAudit() {
-  addLiveLog('system', 'Target: ' + state.targetUrl);
-
-  // Load all existing events immediately — don't wait for new ones
-  fetch('/api/logs').then(function(r) { return r.json(); }).then(function(logs) {
-    if (logs.length > 0) {
-      // Show last 5 existing events
-      var recent = logs.slice(-5);
-      addLiveLog('system', 'Found ' + logs.length + ' existing audit event(s) — showing latest ' + recent.length);
-      recent.forEach(logEvent);
-      state.lastCount = logs.length;
-      state.auditLogs = logs;
-      document.getElementById('live-count').textContent = logs.length;
-      // Complete immediately with existing data
-      state.auditDone = true;
-      addLiveLog('pass', 'Audit complete — ' + logs.length + ' event(s) loaded');
-      finishAudit();
-      return;
-    }
-
-    // No existing events — wait for new ones
-    state.lastCount = 0;
-    addLiveLog('system', 'No existing events. Send queries through the interceptor now:');
-    addLiveLog('system', 'python -m raiflow.interceptor --target ' + state.targetUrl + ' --port ' + state.port);
-
-    var waited = 0;
-    state.pollTimer = setInterval(function() {
-      waited += 3;
-      fetch('/api/logs').then(function(r) { return r.json(); }).then(function(logs) {
-        if (logs.length > state.lastCount) {
-          var fresh = logs.slice(state.lastCount);
-          fresh.forEach(logEvent);
-          state.lastCount = logs.length;
-          state.auditLogs = logs;
-          document.getElementById('live-count').textContent = logs.length;
-        }
-        if (state.auditLogs.length > 0 && waited >= 5 && !state.auditDone) {
-          state.auditDone = true;
-          clearInterval(state.pollTimer);
-          addLiveLog('pass', 'Audit complete — ' + state.auditLogs.length + ' event(s) captured');
-          finishAudit();
-        }
-      }).catch(function() {});
-      if (waited >= 120 && !state.auditDone) {
-        clearInterval(state.pollTimer);
-        addLiveLog('warn', 'Timeout — no events received. Make sure your app is running.');
-        resetRunBtn();
-      }
-    }, 3000);
-  }).catch(function() {
-    addLiveLog('fail', 'Cannot reach RaiFlow server at port 8000.');
-    resetRunBtn();
-  });
-}
-
-function finishAudit() {
-  resetRunBtn();
-  addLiveLog('system', 'Navigating to results…');
-  setTimeout(function() { buildResults(); goStep(4); }, 1200);
-}
-
-function resetRunBtn() {
-  var btn = document.getElementById('btnRun');
-  btn.disabled = false; btn.textContent = '▶ Start Audit';
-}
-
-function addLiveLog(type, msg) {
-  var feed = document.getElementById('live-feed');
-  var el = document.createElement('div');
-  el.className = 'log-entry ' + type;
-  var ts = new Date().toLocaleTimeString([], { hour12: false });
-  el.innerHTML = '<span class="ts">' + ts + '</span><span class="tag">[' + type.toUpperCase() + ']</span><span>' + msg + '</span>';
-  feed.appendChild(el);
+// ── Live feed ─────────────────────────────────────────────────────────────────
+function appendLog(cssClass, tag, msg) {
+  const feed = document.getElementById('live-feed');
+  const entry = document.createElement('div');
+  entry.className = 'log-entry ' + cssClass;
+  entry.innerHTML =
+    '<span class="log-ts">' + ts() + '</span>' +
+    '<span class="log-tag">[' + tag + ']</span>' +
+    '<span class="log-msg">' + escHtml(msg) + '</span>';
+  feed.appendChild(entry);
+  state.liveCount++;
+  document.getElementById('live-count').textContent = state.liveCount;
   feed.scrollTop = feed.scrollHeight;
 }
 
-// ── Step 4: Results ───────────────────────────────────────────────────────────
-function buildResults() {
-  if (!state.auditLogs.length) return;
-  var latest = state.auditLogs[state.auditLogs.length - 1];
-  var report = latest.audit_report;
-  if (!report || !report.sections) return;
-  state.reportData = { latest: latest, report: report };
-
-  var sectionScores = report.sections.map(function(s) {
-    var scores = s.stages.map(function(st) { return st.final_score || 0; });
-    return scores.reduce(function(a, b) { return a + b; }, 0) / (scores.length || 1);
-  });
-  var overall = sectionScores.reduce(function(a, b) { return a + b; }, 0) / (sectionScores.length || 1);
-  var pct = Math.round(overall * 100);
-
-  var circle = document.getElementById('score-circle');
-  document.getElementById('score-num').textContent = pct + '%';
-  circle.className = 'score-circle ' + (pct >= 75 ? 'pass' : pct >= 50 ? 'warn' : 'fail');
-
-  var risk = pct >= 80 ? 'Low' : pct >= 60 ? 'Medium' : pct >= 40 ? 'High' : 'Critical';
-  var riskColor = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--amber)' : pct >= 40 ? 'var(--orange)' : 'var(--red)';
-  document.getElementById('risk-level').textContent = risk;
-  document.getElementById('risk-level').style.color = riskColor;
-  document.getElementById('checks-run').textContent = report.sections.reduce(function(a, s) { return a + s.stages.length; }, 0);
-  document.getElementById('result-framework').textContent = state.frameworkName;
-  var violations = report.sections.reduce(function(a, s) { return a + s.stages.filter(function(st) { return !st.passed; }).length; }, 0);
-  document.getElementById('violations-count').textContent = violations;
-  document.getElementById('violations-count').style.color = violations === 0 ? 'var(--green)' : 'var(--red)';
-
-  var articles = state.framework === 'eu_ai_act' ? EU_ARTICLES
-    : report.sections.map(function(s) { return { id: s.section_id, name: s.section_id, icon: '📋' }; });
-
-  document.getElementById('heatmap').innerHTML = articles.map(function(article) {
-    var section = report.sections.find(function(s) { return s.section_id === article.id; });
-    var score = 0, status = 'unknown';
-    if (section && section.stages && section.stages.length) {
-      var sc = section.stages.map(function(st) { return st.final_score || 0; });
-      score = sc.reduce(function(a, b) { return a + b; }, 0) / sc.length;
-      var p = Math.round(score * 100);
-      status = p >= 75 ? 'compliant' : p >= 50 ? 'partial' : 'non-compliant';
-    }
-    return '<div class="heatmap-cell ' + status + '">' +
-      '<span class="heatmap-icon">' + article.icon + '</span>' +
-      '<span class="heatmap-id">' + article.id.replace('Article ', 'Art.') + '</span>' +
-      '<span class="heatmap-name">' + article.name + '</span>' +
-      '<span class="heatmap-score">' + Math.round(score * 100) + '%</span></div>';
-  }).join('');
-
-  document.getElementById('findings').innerHTML = report.sections.map(function(section) {
-    var sc = section.stages.map(function(st) { return st.final_score || 0; });
-    var avg = sc.reduce(function(a, b) { return a + b; }, 0) / (sc.length || 1);
-    var p2 = Math.round(avg * 100);
-    var cls = p2 >= 75 ? 'pass' : p2 >= 50 ? 'warn' : 'fail';
-    var label = p2 >= 75 ? 'PASS' : p2 >= 50 ? 'PARTIAL' : 'FAIL';
-    var stages = section.stages.map(function(st) {
-      var sp = Math.round((st.final_score || 0) * 100);
-      var sc2 = sp >= 75 ? 'pass' : sp < 30 ? 'fail' : 'warn';
-      var col = sp >= 75 ? 'var(--green)' : sp < 30 ? 'var(--red)' : 'var(--amber)';
-      return '<div class="stage-row"><span class="stage-name">' + st.stage + '</span>' +
-        '<div class="stage-track"><div class="stage-fill ' + sc2 + '" style="width:' + sp + '%"></div></div>' +
-        '<span class="stage-pct" style="color:' + col + '">' + sp + '%</span></div>';
-    }).join('');
-    return '<div class="finding-card"><div class="finding-header">' +
-      '<span class="finding-title">' + section.section_id + '</span>' +
-      '<span class="finding-badge ' + cls + '">' + label + ' · ' + p2 + '%</span></div>' + stages + '</div>';
-  }).join('');
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ── Step 5: Report ────────────────────────────────────────────────────────────
-function renderReportPreview() {
-  if (!state.reportData) return;
-  var report = state.reportData.report;
-  var now = new Date().toLocaleString();
-  var html = '<h2>RaiFlow Compliance Report</h2><p>Generated: ' + now + ' &nbsp;·&nbsp; Framework: ' + state.frameworkName + '</p><h2>Executive Summary</h2>';
-  report.sections.forEach(function(s) {
-    var sc = s.stages.map(function(st) { return st.final_score || 0; });
-    var avg = sc.reduce(function(a, b) { return a + b; }, 0) / (sc.length || 1);
-    var p = Math.round(avg * 100);
-    var cls = p >= 75 ? 'rp-pass' : p >= 50 ? 'rp-warn' : 'rp-fail';
-    var label = p >= 75 ? '✅ PASS' : p >= 50 ? '⚠️ PARTIAL' : '❌ FAIL';
-    html += '<div class="rp-row"><span>' + s.section_id + '</span><span class="' + cls + '">' + label + ' (' + p + '%)</span></div>';
-  });
-  html += '<h2>Recommendations</h2>';
-  report.sections.forEach(function(s) {
-    s.stages.filter(function(st) { return (st.final_score || 1) < 0.75; }).forEach(function(st) {
-      html += '<p>⚠ <strong>' + s.section_id + ' — ' + st.stage + ':</strong> Score ' + Math.round((st.final_score || 0) * 100) + '% is below threshold. Review compliance measures for this area.</p>';
-    });
-  });
-  html += '<p style="margin-top:16px;font-size:12px;color:var(--muted)">Disclaimer: RaiFlow is a compliance assistance tool and does not constitute legal advice.</p>';
-  document.getElementById('report-preview').innerHTML = html;
+// ── Article cards ─────────────────────────────────────────────────────────────
+function showCards() {
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('cards-grid').style.display = '';
 }
 
-function downloadReport() {
-  if (!state.reportData) return;
-  var report = state.reportData.report;
-  var now = new Date();
-  var sections = report.sections.map(function(s) {
-    var sc = s.stages.map(function(st) { return st.final_score || 0; });
-    var avg = sc.reduce(function(a, b) { return a + b; }, 0) / (sc.length || 1);
-    var p = Math.round(avg * 100);
-    var label = p >= 75 ? 'PASS' : p >= 50 ? 'PARTIAL' : 'FAIL';
-    var color = p >= 75 ? '#22c55e' : p >= 50 ? '#f59e0b' : '#ef4444';
-    var rows = s.stages.map(function(st) {
-      var sp = Math.round((st.final_score || 0) * 100);
-      var sc2 = sp >= 75 ? '#22c55e' : sp < 30 ? '#ef4444' : '#f59e0b';
-      return '<tr><td style="padding:6px 12px;color:#94a3b8">' + st.stage + '</td>' +
-        '<td style="padding:6px 12px"><div style="background:#1e2235;border-radius:3px;height:6px;overflow:hidden">' +
-        '<div style="background:' + sc2 + ';width:' + sp + '%;height:100%"></div></div></td>' +
-        '<td style="padding:6px 12px;color:' + sc2 + ';font-weight:700;text-align:right">' + sp + '%</td></tr>';
-    }).join('');
-    return '<div style="background:#0f1117;border:1px solid #1e2235;border-radius:12px;padding:20px;margin-bottom:16px">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">' +
-      '<span style="font-size:15px;font-weight:700;color:#e2e8f0">' + s.section_id + '</span>' +
-      '<span style="background:' + color + '22;color:' + color + ';border:1px solid ' + color + '44;padding:3px 12px;border-radius:99px;font-size:12px;font-weight:700">' + label + ' · ' + p + '%</span></div>' +
-      '<table style="width:100%;border-collapse:collapse">' + rows + '</table></div>';
-  }).join('');
+function upsertCard(result) {
+  showCards();
+  const grid = document.getElementById('cards-grid');
+  const ruleId = result.rule_id;
 
-  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>RaiFlow Compliance Report</title>' +
-    '<style>@import url(\'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap\');' +
-    'body{font-family:Inter,sans-serif;background:#080a0f;color:#e2e8f0;margin:0;padding:40px}' +
-    'h1{font-size:28px;font-weight:800;background:linear-gradient(90deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}' +
-    'h2{font-size:14px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin:28px 0 12px;padding-bottom:8px;border-bottom:1px solid #1e2235}' +
-    '.meta{color:#64748b;font-size:13px;margin-bottom:32px}.disclaimer{color:#475569;font-size:11px;margin-top:32px;padding-top:16px;border-top:1px solid #1e2235}</style></head>' +
-    '<body><h1>RaiFlow Compliance Report</h1>' +
-    '<div class="meta">Generated: ' + now.toLocaleString() + ' &nbsp;·&nbsp; Framework: ' + state.frameworkName + '</div>' +
-    '<h2>Section Results</h2>' + sections +
-    '<div class="disclaimer">This report was generated by RaiFlow and does not constitute legal advice. Always consult qualified legal counsel for regulatory compliance matters.</div>' +
-    '</body></html>';
+  // Track order
+  if (!state.cards[ruleId]) {
+    state.cardOrder.push(ruleId);
+  }
+  state.cards[ruleId] = result;
 
-  var win = window.open('', '_blank');
-  win.document.write(html);
-  win.document.close();
-  win.onload = function() { win.focus(); win.print(); };
+  // Build or update DOM element
+  let card = document.getElementById('card-' + ruleId);
+  if (!card) {
+    card = document.createElement('div');
+    card.id = 'card-' + ruleId;
+    grid.appendChild(card);
+  }
+
+  const status = result.status;
+  const scoreVal = (result.score !== null && result.score !== undefined)
+    ? Math.round(result.score * 100) + '%' : '--';
+  const threshVal = (result.threshold !== null && result.threshold !== undefined)
+    ? Math.round(result.threshold * 100) + '%' : '--';
+  const scoreClass = status === 'pass' ? 'pass-color' : status === 'fail' ? 'fail-color' : 'muted-color';
+
+  let hintHtml = '';
+  if (status === 'fail' && result.remediation_hint) {
+    hintHtml =
+      '<div class="card-hint">' +
+        '<div class="card-hint-label">Remediation Hint</div>' +
+        escHtml(result.remediation_hint) +
+      '</div>' +
+      '<button class="btn-copy" onclick="event.stopPropagation();copyHint(this,' + JSON.stringify(result.remediation_hint) + ')">Copy remediation hint</button>';
+  }
+
+  card.className = 'article-card ' + status;
+  card.setAttribute('onclick', 'openCheckDetails(' + JSON.stringify(ruleId) + ')');
+  card.innerHTML =
+    '<div class="card-header">' +
+      '<div>' +
+        '<div class="card-title">' + escHtml(result.check_name) + '</div>' +
+        '<div class="card-article-id">' + escHtml(result.article_id) + ' · ' + escHtml(ruleId) + '</div>' +
+      '</div>' +
+      '<span class="status-badge ' + status + '">' + status.toUpperCase() + '</span>' +
+    '</div>' +
+    '<div class="card-scores">' +
+      '<div class="card-score-item">' +
+        '<span class="card-score-label">Score</span>' +
+        '<span class="card-score-value ' + scoreClass + '">' + scoreVal + '</span>' +
+      '</div>' +
+      '<div class="card-score-item">' +
+        '<span class="card-score-label">Threshold</span>' +
+        '<span class="card-score-value muted-color">' + threshVal + '</span>' +
+      '</div>' +
+    '</div>' +
+    hintHtml +
+    '<div style="font-size:10px;color:var(--muted);margin-top:2px;opacity:0.6">Click for details</div>';
 }
 
-// ── Synthetic event (direct paste mode) ──────────────────────────────────────
-function buildSyntheticEvent(data) {
-  var answer  = data.answer  || data.response || '';
-  var context = data.context || '';
-  var hasEmail = /[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}/i.test(answer);
-  var hasToxic = /\b(kill|bomb|hack|scam)\b/i.test(answer);
-  var ansW = new Set((answer.toLowerCase().match(/\b\w+\b/g) || []));
-  var ctxW = new Set((context.toLowerCase().match(/\b\w+\b/g) || []));
-  var overlap = Array.from(ansW).filter(function(w) { return ctxW.has(w); }).length;
-  var faith = ansW.size ? Math.min(1, overlap / ansW.size) : 0.5;
-  return {
-    timestamp: new Date().toISOString(), function: '[direct paste]',
-    framework: state.framework, framework_name: state.frameworkName, model: 'lightweight',
-    audit_fast: { passed: !hasEmail && !hasToxic,
-      scores: { pii_clean: hasEmail ? 0 : 1, toxicity_safe: hasToxic ? 0 : 1, faithfulness: faith },
-      violations: { pii_types: hasEmail ? ['email'] : [], toxicity_categories: hasToxic ? ['detected'] : [] } },
-    audit_report: { policy: state.framework, sections: [{ section_id: 'Fast Audit', stages: [
-      { stage: 'PII Check',    final_score: hasEmail ? 0.0 : 1.0, passed: !hasEmail,   threshold: 1.0, history: [] },
-      { stage: 'Toxicity',     final_score: hasToxic ? 0.0 : 1.0, passed: !hasToxic,   threshold: 1.0, history: [] },
-      { stage: 'Faithfulness', final_score: faith,                 passed: faith >= 0.5, threshold: 0.5, history: [] },
-    ]}] },
+function copyHint(btn, hint) {
+  navigator.clipboard.writeText(hint).then(function() {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'Copy remediation hint';
+      btn.classList.remove('copied');
+    }, 1800);
+  });
+}
+
+// ── Score banner ──────────────────────────────────────────────────────────────
+function updateScoreBanner(overrideScore) {
+  const passing = state.passCount;
+  const failing = state.failCount;
+  const total = passing + failing + state.skipCount;
+  const nonSkipped = passing + failing;
+
+  document.getElementById('stat-checks').textContent = total > 0 ? total : '--';
+  document.getElementById('stat-violations').textContent = failing > 0 ? failing : (total > 0 ? '0' : '--');
+  document.getElementById('stat-passing').textContent = total > 0 ? passing : '--';
+  document.getElementById('stat-failing').textContent = total > 0 ? failing : '--';
+
+  if (overrideScore !== undefined) {
+    renderScore(overrideScore);
+  } else if (nonSkipped > 0) {
+    renderScore(Math.round((passing / nonSkipped) * 100));
+  }
+}
+
+function renderScore(score) {
+  document.getElementById('score-num').textContent = score;
+  const circle = document.getElementById('score-circle');
+  const badge = document.getElementById('risk-badge');
+  circle.className = 'score-circle';
+  badge.className = 'risk-badge';
+
+  let level, cls;
+  if (score === 100)       { level = 'Low';      cls = 'low'; }
+  else if (score >= 75)    { level = 'Medium';   cls = 'medium'; }
+  else if (score >= 50)    { level = 'High';     cls = 'high'; }
+  else                     { level = 'Critical'; cls = 'critical'; }
+
+  circle.classList.add(cls);
+  badge.classList.add(cls);
+  badge.textContent = level;
+}
+
+// ── Clear results ─────────────────────────────────────────────────────────────
+function clearResults() {
+  state.passCount = 0;
+  state.failCount = 0;
+  state.skipCount = 0;
+  state.liveCount = 0;
+  state.cardOrder = [];
+  state.cards = {};
+  state.lastReport = null;
+  document.getElementById('btn-download').style.display = 'none';
+
+  document.getElementById('live-feed').innerHTML = '';
+  document.getElementById('live-count').textContent = '0';
+  document.getElementById('cards-grid').innerHTML = '';
+  document.getElementById('cards-grid').style.display = 'none';
+  document.getElementById('empty-state').style.display = '';
+
+  document.getElementById('score-num').textContent = '--';
+  document.getElementById('score-circle').className = 'score-circle';
+  document.getElementById('risk-badge').className = 'risk-badge unknown';
+  document.getElementById('risk-badge').textContent = 'Unknown';
+  document.getElementById('stat-checks').textContent = '--';
+  document.getElementById('stat-violations').textContent = '--';
+  document.getElementById('stat-passing').textContent = '--';
+  document.getElementById('stat-failing').textContent = '--';
+}
+
+// ── SSE event handlers ────────────────────────────────────────────────────────
+function handleCheckResult(data) {
+  const status = data.status;
+  if (status === 'pass')    { state.passCount++; appendLog('pass',    'PASS',    data.check_name + ' (' + data.article_id + ') score=' + (data.score !== null ? Math.round(data.score*100)+'%' : 'N/A')); }
+  else if (status === 'fail'){ state.failCount++; appendLog('fail',   'FAIL',    data.check_name + ' (' + data.article_id + ') score=' + (data.score !== null ? Math.round(data.score*100)+'%' : 'N/A') + ' — ' + (data.remediation_hint || '')); }
+  else                       { state.skipCount++; appendLog('skipped','SKIPPED', data.check_name + ' (' + data.article_id + ')'); }
+  upsertCard(data);
+  updateScoreBanner();
+}
+
+function handleRunComplete(data) {
+  setStatus('complete', 'Complete');
+  setRunning(false);
+  const passing = state.passCount;
+  const nonSkipped = state.passCount + state.failCount;
+  const score = nonSkipped > 0 ? Math.round((passing / nonSkipped) * 100) : null;
+  if (score !== null) renderScore(score);
+  updateScoreBanner(score !== null ? score : undefined);
+  appendLog('pass', 'DONE', 'Run complete — overall status: ' + (data.overall_status || 'unknown'));
+  state.lastReport = data;
+  document.getElementById('btn-download').style.display = '';
+}
+
+function handleRunError(data) {
+  setStatus('error', 'Error');
+  setRunning(false);
+  appendLog('error', 'ERROR', data.message || 'Unknown error');
+}
+
+// ── EventSource ───────────────────────────────────────────────────────────────
+function openEventSource() {
+  if (state.es) { state.es.close(); }
+  const es = new EventSource('/api/events');
+  state.es = es;
+
+  es.addEventListener('check_result', function(e) {
+    try { handleCheckResult(JSON.parse(e.data)); } catch(err) { console.error('check_result parse error', err); }
+  });
+  es.addEventListener('run_complete', function(e) {
+    try { handleRunComplete(JSON.parse(e.data)); } catch(err) { console.error('run_complete parse error', err); }
+  });
+  es.addEventListener('run_error', function(e) {
+    try { handleRunError(JSON.parse(e.data)); } catch(err) { console.error('run_error parse error', err); }
+  });
+  es.onerror = function() {
+    // Browser will auto-retry; no manual action needed
   };
 }
 
-// ── Health ────────────────────────────────────────────────────────────────────
-function checkHealth() {
-  fetch('/api/health').then(function(r) {
-    document.getElementById('status-text').textContent = r.ok ? 'Control Plane Online' : 'Degraded';
-    document.getElementById('status-dot').style.background = r.ok ? 'var(--green)' : 'var(--amber)';
-  }).catch(function() {
-    document.getElementById('status-text').textContent = 'Offline';
-    document.getElementById('status-dot').style.background = 'var(--red)';
+// ── Replay run-state ──────────────────────────────────────────────────────────
+function replayRunState(runState) {
+  if (!runState) return;
+  const results = runState.results || [];
+  if (results.length > 0) {
+    showCards();
+    results.forEach(function(r) {
+      if (r.status === 'pass')    state.passCount++;
+      else if (r.status === 'fail') state.failCount++;
+      else                          state.skipCount++;
+      upsertCard(r);
+    });
+    updateScoreBanner();
+  }
+  if (runState.status === 'complete') {
+    setStatus('complete', 'Complete');
+    const nonSkipped = state.passCount + state.failCount;
+    if (nonSkipped > 0) {
+      const score = Math.round((state.passCount / nonSkipped) * 100);
+      renderScore(score);
+      updateScoreBanner(score);
+    }
+    if (runState.report) { state.lastReport = runState.report; }
+    document.getElementById('btn-download').style.display = '';
+  } else if (runState.status === 'running') {
+    setStatus('running', 'Running');
+    setRunning(true);
+  } else if (runState.status === 'error') {
+    setStatus('error', 'Error');
+  }
+}
+
+// ── Download report ───────────────────────────────────────────────────────────
+function downloadReport() {
+  fetch('/api/run-state')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      const report = data.report || state.lastReport || data;
+      const blob = new Blob([JSON.stringify(report, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'raiflow-report-' + new Date().toISOString().slice(0,19).replace(/:/g,'-') + '.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    })
+    .catch(function() {
+      if (state.lastReport) {
+        const blob = new Blob([JSON.stringify(state.lastReport, null, 2)], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'raiflow-report.json';
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    });
+}
+
+// ── Run Checks ────────────────────────────────────────────────────────────────
+function runChecks() {
+  clearResults();
+  setStatus('running', 'Running');
+  setRunning(true);
+  fetch('/api/run', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({stage: state.selectedStage, framework: state.selectedFramework}),
+  }).then(function(resp) {
+    if (resp.status === 409) {
+      appendLog('error', 'ERROR', 'A run is already in progress.');
+      setRunning(false);
+      setStatus('idle', 'Idle');
+    } else if (!resp.ok) {
+      resp.json().then(function(d) {
+        appendLog('error', 'ERROR', 'Failed to start run: ' + JSON.stringify(d));
+      }).catch(function() {
+        appendLog('error', 'ERROR', 'Failed to start run (HTTP ' + resp.status + ')');
+      });
+      setRunning(false);
+      setStatus('error', 'Error');
+    }
+    // 202 accepted — results will stream via SSE
+  }).catch(function(err) {
+    appendLog('error', 'ERROR', 'Network error: ' + err.message);
+    setRunning(false);
+    setStatus('error', 'Error');
   });
 }
 
-checkHealth();
-setInterval(checkHealth, 30000);
+// ── Modal ─────────────────────────────────────────────────────────────────────
+function openCheckDetails(ruleId) {
+  const details = CHECK_DETAILS[ruleId];
+  if (!details) {
+    console.warn('No details found for rule:', ruleId);
+    return;
+  }
+  document.getElementById('modal-title').textContent = details.title;
+  document.getElementById('modal-subtitle').textContent = details.article;
+  document.getElementById('modal-description').textContent = details.description;
+  document.getElementById('modal-citation').textContent = details.citation;
+  document.getElementById('modal-target').textContent = details.target;
+  document.getElementById('modal-overlay').classList.add('show');
+}
 
-window.goStep          = goStep;
-window.selectOption    = selectOption;
-window.selectFramework = selectFramework;
-window.startAudit      = startAudit;
-window.downloadReport  = downloadReport;
-window.copyCode        = copyCode;
+function closeModal(event) {
+  if (!event || event.target.id === 'modal-overlay' || event.type === 'click') {
+    document.getElementById('modal-overlay').classList.remove('show');
+  }
+}
 
+// Close modal on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  // Fetch existing run state, replay, then open SSE
+  fetch('/api/run-state')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.system_name) {
+        document.getElementById('project-name-label').textContent = '— ' + data.system_name;
+      }
+      replayRunState(data);
+    })
+    .catch(function() {
+      // Server not ready yet — that's fine, SSE will carry events
+    })
+    .finally(function() {
+      openEventSource();
+    });
+});
 </script>
 </body>
 </html>

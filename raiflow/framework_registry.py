@@ -70,7 +70,6 @@ class FrameworkRegistry:
     def register(self, framework: FrameworkInfo):
         """Register a new compliance framework."""
         self._frameworks[framework.id] = framework
-        print(f"[REGISTRY] Registered framework: {framework.name} ({framework.id})")
     
     def get_framework(self, framework_id: str) -> Optional[FrameworkInfo]:
         """Get framework information by ID."""
