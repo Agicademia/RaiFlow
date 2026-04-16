@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="raiflow\dashboard\20260416_2153_Image Generation_simple_compose_01kpbhmqhsekvsrb8bj18q9s7a.png" alt="RaiFlow Logo" width="200"/>
+<img src="raiflow\dashboard\20260416_2153_Image Generation_simple_compose_01kpbhmqhsekvsrb8bj18q9s7a.png" alt="RaiFlow Logo" width="200" height="100"/>
 
 # RaiFlow
 
@@ -20,8 +20,8 @@
 ```bash
 
 pip install raiflow
-raiflow init # scan project, generate raiflow.yaml + GitHub Actions workflow
-raiflow check # open live compliance dashboard in browser
+raiflow init            # scan project, generate raiflow.yaml + GitHub Actions workflow
+raiflow check           # open live compliance dashboard in browser
 
 ```
 
