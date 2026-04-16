@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="20260416_2153_Image Generation_simple_compose_01kpbhmqhsekvsrb8bj18q9s7a.png" alt="RaiFlow Logo" width="200"/>
+<img src="raiflow\dashboard\20260416_2153_Image Generation_simple_compose_01kpbhmqhsekvsrb8bj18q9s7a.png" alt="RaiFlow Logo" width="200"/>
 
 # RaiFlow
 
@@ -14,14 +14,17 @@
 [![Coverage](https://img.shields.io/badge/coverage-85%25-green.svg)](https://github.com/Agicademia/RaiFlow)
 
 **One command to scaffold, check, and enforce EU AI Act compliance across your entire CI/CD pipeline.**
+</div>
+
 
 ```bash
+
 pip install raiflow
-raiflow init         # scan project, generate raiflow.yaml + GitHub Actions workflow
-raiflow check        # open live compliance dashboard in browser
+raiflow init # scan project, generate raiflow.yaml + GitHub Actions workflow
+raiflow check # open live compliance dashboard in browser
+
 ```
 
-</div>
 
 ---
 
