@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contribute &mdash; RaiFlow</title>
+  <meta name="description" content="Help build RaiFlow — the EU AI Act compliance gate for CI/CD pipelines.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="assets/banner.png">
+</head>
+<body>
+<header>
+  <div class="container">
+    <nav>
+      <a href="index.html" class="logo-text">RaiFlow</a>
+      <div class="nav-links">
+        <a href="index.html#features">Features</a>
+        <a href="index.html#how-it-works">How it works</a>
+        <a href="docs.html">Docs</a>
+        <a href="contribute.html">Contribute</a>
+        <a href="https://github.com/Agicademia/RaiFlow" target="_blank" class="btn-nav">GitHub</a>
+      </div>
+    </nav>
+  </div>
+</header>
+  <section class="page-hero">
+    <div class="container">
+      <div class="section-label">Open Source</div>
+      <h1>Contribute to RaiFlow</h1>
+      <p>RaiFlow is MIT-licensed and community-driven. Whether you&rsquo;re fixing a bug, adding a new compliance check, or improving the docs &mdash; all contributions are welcome.</p>
+    </div>
+  </section>
+
+  <div class="container" style="padding:4rem 2rem 6rem">
+    <div class="contribute-grid">
+      <div class="contribute-card">
+        <div class="card-icon">🐛</div>
+        <h3>Report a Bug</h3>
+        <p>Found something broken? Open an issue on GitHub with a minimal reproduction case and your Python/OS version.</p>
+        <a href="https://github.com/Agicademia/RaiFlow/issues/new?template=bug_report.md" target="_blank" class="card-link">Open an issue &rarr;</a>
+      </div>
+      <div class="contribute-card">
+        <div class="card-icon">💡</div>
+        <h3>Request a Feature</h3>
+        <p>Have an idea for a new compliance check, framework support (NIST AI RMF, ISO 42001), or dashboard improvement? Start a discussion.</p>
+        <a href="https://github.com/Agicademia/RaiFlow/discussions" target="_blank" class="card-link">Start a discussion &rarr;</a>
+      </div>
+      <div class="contribute-card">
+        <div class="card-icon">🔧</div>
+        <h3>Submit a Pull Request</h3>
+        <p>Fork the repo, create a branch, make your changes, and open a PR. All PRs run the full compliance gate on CI before merging.</p>
+        <a href="https://github.com/Agicademia/RaiFlow/fork" target="_blank" class="card-link">Fork on GitHub &rarr;</a>
+      </div>
+      <div class="contribute-card">
+        <div class="card-icon">📖</div>
+        <h3>Improve the Docs</h3>
+        <p>The <code class="inline-code">docs/</code> folder contains the website. Spotted something outdated or unclear? A simple PR is all it takes.</p>
+        <a href="https://github.com/Agicademia/RaiFlow/tree/main/docs" target="_blank" class="card-link">Edit the docs &rarr;</a>
+      </div>
+      <div class="contribute-card">
+        <div class="card-icon">⚖️</div>
+        <h3>Add a Compliance Check</h3>
+        <p>New checks go in <code class="inline-code">raiflow/gate.py</code> as a <code class="inline-code">_check_*</code> method. Each check returns a <code class="inline-code">CheckResult</code> and never raises. See the design docs for the dual static/semantic pattern.</p>
+        <a href="https://github.com/Agicademia/RaiFlow/blob/main/raiflow/gate.py" target="_blank" class="card-link">View gate.py &rarr;</a>
+      </div>
+      <div class="contribute-card">
+        <div class="card-icon">🧪</div>
+        <h3>Write Tests</h3>
+        <p>We use pytest for unit tests and Hypothesis for property-based tests. All new checks need both. Check <code class="inline-code">tests/</code> for examples.</p>
+        <a href="https://github.com/Agicademia/RaiFlow/tree/main/tests" target="_blank" class="card-link">View tests/ &rarr;</a>
+      </div>
+    </div>
+
+    <div class="docs-section" style="margin-top:2rem">
+      <h2 style="font-size:1.75rem;font-weight:800;margin-bottom:1rem">Development Setup</h2>
+      <div class="code-window">
+        <div class="code-titlebar"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span><span class="code-filename">terminal</span></div>
+        <div class="code-body"><pre><span class="comment"># Clone and set up</span>
+<span class="cmd">git clone</span> https://github.com/Agicademia/RaiFlow.git
+<span class="cmd">cd</span> RaiFlow
+<span class="cmd">python -m venv</span> .venv <span class="cmd">&amp;&amp; source</span> .venv/bin/activate
+<span class="cmd">pip install</span> -e <span class="string">".[dev]"</span>
+
+<span class="comment"># Run the full test suite</span>
+<span class="cmd">python -m pytest</span> tests/ -v
+
+<span class="comment"># Run with mock LLM (no Ollama needed)</span>
+<span class="cmd">RAIFLOW_MOCK_LLM=true python -m pytest</span> tests/ -v
+
+<span class="comment"># Run the compliance gate on itself</span>
+<span class="cmd">raiflow</span> <span class="keyword">check</span> <span class="flag">--stage</span> ci <span class="flag">--no-dashboard</span></pre></div>
+      </div>
+    </div>
+
+    <div class="docs-section">
+      <h2 style="font-size:1.75rem;font-weight:800;margin-bottom:1rem">Project Structure</h2>
+      <div class="code-window">
+        <div class="code-titlebar"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+        <div class="code-body"><pre>raiflow/
+<span class="comment">├── cli.py              # Click CLI entry point</span>
+<span class="comment">├── gate.py             # CheckRunner &mdash; static + semantic compliance checks</span>
+<span class="comment">├── manifest.py         # raiflow.yaml Pydantic schema and loader</span>
+<span class="comment">├── dashboard_server.py # FastAPI + SSE streaming server</span>
+<span class="comment">├── scanner.py          # AI framework detection</span>
+<span class="comment">├── scaffolder.py       # raiflow.yaml + workflow generation</span>
+<span class="comment">├── reporter.py         # JSON compliance report builder</span>
+<span class="comment">├── generator.py        # pytest file generator from policy YAML</span>
+<span class="comment">├── evaluators/         # LLM-based EU AI Act evaluators</span>
+<span class="comment">├── dashboard/          # Single-file SPA (index.html)</span>
+<span class="comment">└── data/               # Bundled policy YAML + GitHub Actions template</span>
+
+tests/
+<span class="comment">├── test_gate.py                    # CheckRunner unit tests</span>
+<span class="comment">├── test_semantic_evaluators.py     # Semantic check unit tests</span>
+<span class="comment">├── test_reporter.py / test_manifest.py / test_cli.py</span>
+<span class="comment">├── test_*_property.py              # Hypothesis property-based tests</span>
+<span class="comment">└── eu_ai_act_test.py               # End-to-end evaluator tests</span></pre></div>
+      </div>
+    </div>
+
+    <div class="cta-section" style="background:none;padding:3rem 0 0;text-align:left">
+      <h2 style="font-size:1.5rem;margin-bottom:0.5rem">Code of Conduct</h2>
+      <p style="color:var(--text-muted);max-width:560px">Be kind, be constructive. We follow the <a href="https://www.contributor-covenant.org/" target="_blank" style="color:var(--primary-light)">Contributor Covenant</a> code of conduct. Issues and PRs that violate it will be closed.</p>
+    </div>
+  </div>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <a href="index.html" class="logo-text">RaiFlow</a>
+      <div class="footer-links">
+        <a href="docs.html">Documentation</a>
+        <a href="contribute.html">Contribute</a>
+        <a href="https://github.com/Agicademia/RaiFlow" target="_blank">GitHub</a>
+        <a href="https://pypi.org/project/raiflow/" target="_blank">PyPI</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 Agicademia. MIT License. Not legal advice.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,109 +1,53 @@
-els: []</pre></div>
-        </div>
-        <div class="callout callout-success">
-          <strong>Tip:</strong> Fields like <code class="inline-code">dataset_path</code>, <code class="inline-code">red_team_prompts_path</code>, and <code class="inline-code">technical_documentation.path</code> are optional. Checks that depend on absent fields are reported as <code class="inline-code">skipped</code> rather than failing.
-        </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation &mdash; RaiFlow</title>
+  <meta name="description" content="Full documentation for RaiFlow — installation, CLI reference, manifest schema, and LLM evaluation.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="assets/banner.png">
+</head>
+<body>
+<header>
+  <div class="container">
+    <nav>
+      <a href="index.html" class="logo-text">RaiFlow</a>
+      <div class="nav-links">
+        <a href="index.html#features">Features</a>
+        <a href="index.html#how-it-works">How it works</a>
+        <a href="docs.html">Docs</a>
+        <a href="contribute.html">Contribute</a>
+        <a href="https://github.com/Agicademia/RaiFlow" target="_blank" class="btn-nav">GitHub</a>
       </div>
+    </nav>
+  </div>
+</header>
+<section class="page-hero">
+  <div class="container">
+    <div class="section-label">Documentation</div>
+    <h1>RaiFlow Reference</h1>
+    <p>Everything you need to install, configure, and integrate RaiFlow into your AI project's CI/CD pipeline.</p>
+  </div>
+</section>
 
-      <!-- CLI: init -->
-      <div class="docs-section" id="cli-     <span class="comment"># optional</span>
-  protected_attributes: [<span class="string">"gender"</span>, <span class="string">"ethnicity"</span>]
-
-<span class="comment"># Article 11 — Technical Documentation</span>
-technical_documentation:
-  path: <span class="string">"docs/tech_doc.md"</span>
-
-<span class="comment"># Article 10 — Robustness</span>
-robustness:
-  red_team_prompts_path: <span class="string">"tests/red_team.txt"</span>  <span class="comment"># optional</span>
-  toxicity_threshold: 0.7
-
-banned_modernance:
-  dataset_path: <span class="string">"data/training.csv"</span> nt"># Article 9 — Risk Management</span>
-risk_management:
-  assessment_path: <span class="string">"docs/risk_assessment.md"</span>
-
-<span class="comment"># Article 14 — Human Oversight</span>
-oversight:
-  override_endpoints:
-    - <span class="string">"/api/override"</span>
-    - <span class="string">"/api/halt"</span>
-
-<span class="comment"># Article 12 — Logging</span>
-logging:
-  middleware_active: <span class="keyword">true</span>
-
-<span class="comment"># Article 10 — Data Governance &amp; Bias</span>
-data_govn class="string">"docs/disclosure.md"</span>  <span class="comment"># optional, for LLM eval</span>
-
-<span class="comme><pre><span class="comment"># Required</span>
-system_name: <span class="string">"my-rag-app"</span>
-risk_level: <span class="string">"high"</span>          <span class="comment"># high | limited | minimal</span>
-compliance_framework: <span class="string">"eu_ai_act"</span>
-
-<span class="comment"># Article 13 — Transparency</span>
-model_metadata:
-  name: <span class="string">"llama3"</span>
-  version: <span class="string">"3.1"</span>
-  disclosure_flag: <span class="keyword">true</span>
-  disclosure_text_path: <spa class="code-filename">raiflow.yaml</span>
-          </div>
-          <div class="code-body"ocs-section" id="manifest">
-        <h2>raiflow.yaml — Manifest Schema</h2>
-        <p>The manifest is the single source of truth for your compliance configuration. <code class="inline-code">raiflow init</code> generates a pre-filled version. Fields marked optional default gracefully.</p>
-        <div class="code-window" style="margin:1.5rem 0">
-          <div class="code-titlebar">
-            <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
-            <span a build artifact.</p>
-            </div>
-          </div>
-        </div>
+<div class="container">
+  <div class="docs-layout">
+    <aside class="docs-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Getting Started</div>
+        <a href="#installation" class="active">Installation</a>
+        <a href="#quickstart">Quick Start</a>
+        <a href="#manifest">raiflow.yaml</a>
       </div>
-
-      <!-- Manifest -->
-      <div class="dv class="step-item-content">
-              <h4>Run your first check</h4>
-              <p>Run <code class="inline-code">raiflow check --stage ci</code> to open the live dashboard and see results stream in real-time.</p>
-            </div>
-          </div>
-          <div class="step-item">
-            <div class="step-item-content">
-              <h4>Push and let CI gate your pipeline</h4>
-              <p>Every pull request now runs compliance checks. Failures block merges. A signed JSON report is attached as        </div>
-          </div>
-          <div class="step-item">
-            <dide> files for AI framework imports, infers a risk level, and writes <code class="inline-code">raiflow.yaml</code> and <code class="inline-code">.github/workflows/rai-compliance.yml</code>.</p>
-            </div>
-          </div>
-          <div class="step-item">
-            <div class="step-item-content">
-              <h4>Edit raiflow.yaml</h4>
-              <p>Fill in the paths to your risk assessment, technical documentation, and override endpoints. The generated file is pre-commented to guide you.</p>
-     <p>Run <code class="inline-code">raiflow init</code> in your project root. RaiFlow scans <code class="inline-code">.py</coline-code">--enable-llm-checks</code>), you also need either <a href="https://ollama.com" target="_blank" style="color:var(--primary-light)">Ollama</a> running locally or a Google Gemini / OpenAI API key.
-        </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">CLI Reference</div>
+        <a href="#cli-init">raiflow init</a>
+        <a href="#cli-check">raiflow check</a>
+        <a href="#cli-generate-tests">raiflow generate-tests</a>
       </div>
-
-      <!-- Quick Start -->
-      <div class="docs-section" id="quickstart">
-        <h2>Quick Start</h2>
-        <div class="steps-numbered">
-          <div class="step-item">
-            <div class="step-item-content">
-              <h4>Scaffold your project</h4>
-             v class="callout callout-info">
-          <strong>Optional:</strong> For semantic LLM checks (<code class="incs-section" id="installation">
-        <h2>Installation</h2>
-        <p>RaiFlow requires Python 3.9 or later. Install from PyPI:</p>
-        <div class="code-window" style="margin:1.5rem 0">
-          <div class="code-titlebar">
-            <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
-          </div>
-          <div class="code-body"><pre><span class="cmd">pip install</span> <span class="string">raiflow</span></pre></div>
-        </div>
-        <di <main class="docs-content">
-
-      <!-- Installation -->
-      <div class="dov class="sidebar-section-title">Compliance Checks</div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Compliance Checks</div>
         <a href="#stages">Pipeline Stages</a>
         <a href="#checks-detail">Check Details</a>
         <a href="#llm-checks">LLM Evaluation</a>
@@ -115,59 +59,323 @@ model_metadata:
         <a href="#report">Compliance Report</a>
       </div>
     </aside>
+    <main class="docs-content">
 
-    <!-- Content -->
-   iv>
-      <div class="sidebar-section">
-        <di"sidebar-section">
-        <div class="sidebar-section-title">Getting Started</div>
-        <a href="#installation" class="active">Installation</a>
-        <a href="#quickstart">Quick Start</a>
-        <a href="#manifest">raiflow.yaml</a>
+      <!-- Installation -->
+      <div class="docs-section" id="installation">
+        <h2>Installation</h2>
+        <p>RaiFlow requires Python 3.9 or later. Install from PyPI:</p>
+        <div class="code-window" style="margin:1.5rem 0">
+          <div class="code-titlebar">
+            <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          </div>
+          <div class="code-body"><pre><span class="cmd">pip install</span> <span class="string">raiflow</span></pre></div>
+        </div>
+        <div class="callout callout-info">
+          <strong>Optional:</strong> For semantic LLM checks (<code class="inline-code">--enable-llm-checks</code>), you also need either <a href="https://ollama.com" target="_blank" style="color:var(--primary-light)">Ollama</a> running locally or a Google Gemini / OpenAI API key. The <code class="inline-code">raiflow init</code> wizard will guide you through setup.
+        </div>
       </div>
-      <div class="sidebar-section">
-        <div class="sidebar-section-title">CLI Reference</div>
-        <a href="#cli-init">raiflow init</a>
-        <a href="#cli-check">raiflow check</a>
-        <a href="#cli-generate-tests">raiflow generate-tests</a>
-      </deed to install, configure, and integrate RaiFlow into your AI project's CI/CD pipeline.</p>
-  </div>
-</section>
 
-<div class="container">
-  <div class="docs-layout">
-
-    <!-- Sidebar -->
-    <aside class="docs-sidebar">
-      <div class=ction class="page-hero">
-  <div class="container">
-    <div class="section-label">Documentation</div>
-    <h1>RaiFlow Reference</h1>
-    <p>Everything you nlass="active">Docs</a>
-        <a href="contribute.html">Contribute</a>
-        <a href="https://github.com/Agicademia/RaiFlow" target="_blank" class="btn-nav">GitHub</a>
+      <!-- Quick Start -->
+      <div class="docs-section" id="quickstart">
+        <h2>Quick Start</h2>
+        <div class="steps-numbered">
+          <div class="step-item">
+            <div class="step-item-content">
+              <h4>Scaffold your project</h4>
+              <p>Run <code class="inline-code">raiflow init</code> in your project root. RaiFlow scans <code class="inline-code">.py</code> files for AI framework imports, infers a risk level, and writes <code class="inline-code">raiflow.yaml</code> and <code class="inline-code">.github/workflows/rai-compliance.yml</code>.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-item-content">
+              <h4>Edit raiflow.yaml</h4>
+              <p>Fill in the paths to your risk assessment, technical documentation, and override endpoints. The generated file is pre-commented to guide you.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-item-content">
+              <h4>Run your first check</h4>
+              <p>Run <code class="inline-code">raiflow check --stage ci</code> to open the live dashboard and see results stream in real-time. Use <code class="inline-code">--no-dashboard</code> for terminal-only output.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-item-content">
+              <h4>Push and let CI gate your pipeline</h4>
+              <p>Every pull request now runs compliance checks. Failures block merges. A signed JSON report is attached as a build artifact.</p>
+            </div>
+          </div>
+        </div>
       </div>
-    </nav>
+
+      <!-- Manifest -->
+      <div class="docs-section" id="manifest">
+        <h2>raiflow.yaml &mdash; Manifest Schema</h2>
+        <p>The manifest is the single source of truth for your compliance configuration. <code class="inline-code">raiflow init</code> generates a pre-filled version. Fields marked optional default gracefully &mdash; checks that depend on absent fields are reported as <code class="inline-code">skipped</code> rather than failing.</p>
+        <div class="code-window" style="margin:1.5rem 0">
+          <div class="code-titlebar">
+            <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+            <span class="code-filename">raiflow.yaml</span>
+          </div>
+          <div class="code-body"><pre><span class="comment"># Required</span>
+system_name: <span class="string">"my-rag-app"</span>
+risk_level: <span class="string">"high"</span>          <span class="comment"># high | limited | minimal</span>
+compliance_framework: <span class="string">"eu_ai_act"</span>
+
+<span class="comment"># Article 13 &mdash; Transparency</span>
+model_metadata:
+  name: <span class="string">"llama3"</span>
+  version: <span class="string">"3.1"</span>
+  disclosure_flag: <span class="keyword">true</span>
+  disclosure_text_path: <span class="string">"docs/disclosure.md"</span>  <span class="comment"># optional, for LLM eval</span>
+
+<span class="comment"># Article 9 &mdash; Risk Management</span>
+risk_management:
+  assessment_path: <span class="string">"docs/risk_assessment.md"</span>
+
+<span class="comment"># Article 14 &mdash; Human Oversight</span>
+oversight:
+  override_endpoints:
+    - <span class="string">"/api/override"</span>
+    - <span class="string">"/api/halt"</span>
+
+<span class="comment"># Article 12 &mdash; Logging</span>
+logging:
+  middleware_active: <span class="keyword">true</span>
+
+<span class="comment"># Article 10 &mdash; Data Governance &amp; Bias</span>
+data_governance:
+  dataset_path: <span class="string">"data/training.csv"</span>       <span class="comment"># optional</span>
+  protected_attributes: [<span class="string">"gender"</span>, <span class="string">"ethnicity"</span>]
+
+<span class="comment"># Article 11 &mdash; Technical Documentation</span>
+technical_documentation:
+  path: <span class="string">"docs/tech_doc.md"</span>
+
+<span class="comment"># Article 10 &mdash; Robustness</span>
+robustness:
+  red_team_prompts_path: <span class="string">"tests/red_team.txt"</span>  <span class="comment"># optional</span>
+  toxicity_threshold: 0.7
+
+banned_models: []</pre></div>
+        </div>
+        <div class="callout callout-success">
+          <strong>Tip:</strong> Fields like <code class="inline-code">dataset_path</code>, <code class="inline-code">red_team_prompts_path</code>, and <code class="inline-code">technical_documentation.path</code> are optional. Checks that depend on absent fields are reported as <code class="inline-code">skipped</code> rather than failing.
+        </div>
+      </div>
+
+      <!-- CLI: init -->
+      <div class="docs-section" id="cli-init">
+        <h2>raiflow init</h2>
+        <p>Scans your project for AI framework imports (LangChain, OpenAI, Ollama, LlamaIndex, Transformers, FastAPI, and more), infers your EU AI Act risk level, and writes two files:</p>
+        <ul>
+          <li><code class="inline-code">raiflow.yaml</code> &mdash; pre-filled compliance manifest</li>
+          <li><code class="inline-code">.github/workflows/rai-compliance.yml</code> &mdash; ready-to-use GitHub Actions workflow</li>
+        </ul>
+        <div class="code-window" style="margin:1.5rem 0">
+          <div class="code-titlebar"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+          <div class="code-body"><pre><span class="cmd">raiflow</span> <span class="keyword">init</span>
+<span class="cmd">raiflow</span> <span class="keyword">init</span> <span class="flag">--directory</span> ./my-ai-project
+<span class="cmd">raiflow</span> <span class="keyword">init</span> <span class="flag">--force</span>   <span class="comment"># overwrite existing files</span></pre></div>
+        </div>
+        <h3>Options</h3>
+        <table class="checks-table">
+          <thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code class="inline-code">--directory</code></td><td><code class="inline-code">.</code></td><td style="color:var(--text-muted)">Root directory to scan and write files into</td></tr>
+            <tr><td><code class="inline-code">--force</code></td><td><code class="inline-code">false</code></td><td style="color:var(--text-muted)">Overwrite existing raiflow.yaml and workflow</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CLI: check -->
+      <div class="docs-section" id="cli-check">
+        <h2>raiflow check</h2>
+        <p>Runs compliance checks for a pipeline stage. By default opens a live browser dashboard; use <code class="inline-code">--no-dashboard</code> for headless/CI mode.</p>
+        <div class="code-window" style="margin:1.5rem 0">
+          <div class="code-titlebar"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+          <div class="code-body"><pre><span class="cmd">raiflow</span> <span class="keyword">check</span> <span class="flag">--stage</span> ci
+<span class="cmd">raiflow</span> <span class="keyword">check</span> <span class="flag">--stage</span> ci <span class="flag">--no-dashboard</span>
+<span class="cmd">raiflow</span> <span class="keyword">check</span> <span class="flag">--stage</span> ci <span class="flag">--target</span> app.py <span class="flag">--no-dashboard</span>
+<span class="cmd">raiflow</span> <span class="keyword">check</span> <span class="flag">--stage</span> ci <span class="flag">--threshold</span> 0.7 <span class="flag">--no-dashboard</span>
+<span class="cmd">raiflow</span> <span class="keyword">check</span> <span class="flag">--stage</span> ci <span class="flag">--enable-llm-checks</span> <span class="flag">--no-dashboard</span>
+<span class="cmd">raiflow</span> <span class="keyword">check</span> <span class="flag">--stage</span> ci <span class="flag">--dry-run</span> <span class="flag">--no-dashboard</span></pre></div>
+        </div>
+        <h3>Options</h3>
+        <table class="checks-table">
+          <thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code class="inline-code">--stage</code></td><td><code class="inline-code">ci</code></td><td style="color:var(--text-muted)">pre-commit | ci | pre-deploy | post-deploy</td></tr>
+            <tr><td><code class="inline-code">--manifest</code></td><td><code class="inline-code">raiflow.yaml</code></td><td style="color:var(--text-muted)">Path to your compliance manifest</td></tr>
+            <tr><td><code class="inline-code">--output</code></td><td><code class="inline-code">raiflow-report.json</code></td><td style="color:var(--text-muted)">Path to write the JSON compliance report</td></tr>
+            <tr><td><code class="inline-code">--target</code></td><td>&mdash;</td><td style="color:var(--text-muted)">Source file(s) to scan for Article 14 override endpoints (repeatable)</td></tr>
+            <tr><td><code class="inline-code">--threshold</code></td><td>&mdash;</td><td style="color:var(--text-muted)">Override per-rule pass threshold for all checks (0.0&ndash;1.0)</td></tr>
+            <tr><td><code class="inline-code">--enable-llm-checks</code></td><td><code class="inline-code">false</code></td><td style="color:var(--text-muted)">Enable semantic LLM-based evaluation (requires Ollama or API key)</td></tr>
+            <tr><td><code class="inline-code">--dry-run</code></td><td><code class="inline-code">false</code></td><td style="color:var(--text-muted)">Run all checks but always exit 0</td></tr>
+            <tr><td><code class="inline-code">--no-dashboard</code></td><td><code class="inline-code">false</code></td><td style="color:var(--text-muted)">Headless mode &mdash; terminal output only</td></tr>
+            <tr><td><code class="inline-code">--dashboard-port</code></td><td><code class="inline-code">8000</code></td><td style="color:var(--text-muted)">Port for the live dashboard server</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CLI: generate-tests -->
+      <div class="docs-section" id="cli-generate-tests">
+        <h2>raiflow generate-tests</h2>
+        <p>Reads the bundled <code class="inline-code">eu_ai_act.yaml</code> policy and generates a <code class="inline-code">pytest</code> file for every rule, so you can run compliance checks as part of your normal test suite.</p>
+        <div class="code-window" style="margin:1.5rem 0">
+          <div class="code-titlebar"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+          <div class="code-body"><pre><span class="cmd">raiflow</span> <span class="keyword">generate-tests</span>
+<span class="cmd">raiflow</span> <span class="keyword">generate-tests</span> <span class="flag">--output-dir</span> tests/compliance</pre></div>
+        </div>
+      </div>
+
+      <!-- Pipeline Stages -->
+      <div class="docs-section" id="stages">
+        <h2>Pipeline Stages</h2>
+        <p>Each stage runs a different subset of checks. <code class="inline-code">pre-commit</code> is lightweight and fast. <code class="inline-code">ci</code> and <code class="inline-code">pre-deploy</code> run the full suite including Article 11.</p>
+        <table class="checks-table" style="margin-top:1.5rem">
+          <thead><tr><th>Stage</th><th>Checks</th><th>Typical use</th></tr></thead>
+          <tbody>
+            <tr><td><code class="inline-code">pre-commit</code></td><td style="color:var(--text-muted)">Banned Model Scan</td><td style="color:var(--text-muted)">Fast local check before every commit</td></tr>
+            <tr><td><code class="inline-code">ci</code></td><td style="color:var(--text-muted)">All 8 checks</td><td style="color:var(--text-muted)">Pull request gate</td></tr>
+            <tr><td><code class="inline-code">pre-deploy</code></td><td style="color:var(--text-muted)">All 8 checks</td><td style="color:var(--text-muted)">Pre-production gate</td></tr>
+            <tr><td><code class="inline-code">post-deploy</code></td><td style="color:var(--text-muted)">5 checks (no Technical Docs / Bias / Robustness)</td><td style="color:var(--text-muted)">Production monitoring</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Check Details -->
+      <div class="docs-section" id="checks-detail">
+        <h2>Check Details</h2>
+        <table class="checks-table" style="margin-top:1.5rem">
+          <thead><tr><th>Check</th><th>Rule ID</th><th>Article</th><th>What it verifies</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Banned Model Scan</strong></td><td><code class="inline-code">BAN-1</code></td><td><span class="tag tag-internal">Internal</span></td><td style="color:var(--text-muted)">Model identifier not on your blocklist</td></tr>
+            <tr><td><strong>Transparency by Design</strong></td><td><code class="inline-code">ART13-1</code></td><td><span class="tag tag-article">Article 13</span></td><td style="color:var(--text-muted)">Disclosure flag set; semantic: AI identification clarity and understandability</td></tr>
+            <tr><td><strong>Risk Management Documentation</strong></td><td><code class="inline-code">ART9-1</code></td><td><span class="tag tag-article">Article 9</span></td><td style="color:var(--text-muted)">Risk assessment file exists; semantic: completeness, lifecycle coverage, vulnerable groups</td></tr>
+            <tr><td><strong>Human Oversight Endpoints</strong></td><td><code class="inline-code">ART14-1 / ART14-5</code></td><td><span class="tag tag-article">Article 14</span></td><td style="color:var(--text-muted)">Override/halt endpoints in source; semantic: intervention clarity and operator comprehensibility</td></tr>
+            <tr><td><strong>Logging Middleware Active</strong></td><td><code class="inline-code">ART12-1</code></td><td><span class="tag tag-article">Article 12</span></td><td style="color:var(--text-muted)">Logging middleware flag set in manifest</td></tr>
+            <tr><td><strong>Technical Documentation</strong></td><td><code class="inline-code">ART11-1</code></td><td><span class="tag tag-article">Article 11</span></td><td style="color:var(--text-muted)">Tech doc file exists; semantic: all five Annex IV elements covered</td></tr>
+            <tr><td><strong>Bias Detection</strong></td><td><code class="inline-code">ART10-3</code></td><td><span class="tag tag-article">Article 10</span></td><td style="color:var(--text-muted)">Dataset scanned for bias on declared protected attributes</td></tr>
+            <tr><td><strong>Robustness / Toxicity</strong></td><td><code class="inline-code">ART10-4</code></td><td><span class="tag tag-article">Article 10</span></td><td style="color:var(--text-muted)">Red-team prompts tested against configurable toxicity threshold</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- LLM Checks -->
+      <div class="docs-section" id="llm-checks">
+        <h2>LLM Evaluation (<code class="inline-code">--enable-llm-checks</code>)</h2>
+        <p>When <code class="inline-code">--enable-llm-checks</code> is passed, four checks gain a semantic evaluation path that reads document content and scores it against EU AI Act criteria using an LLM evaluator. The score (0.0&ndash;1.0) is compared against a per-rule threshold.</p>
+        <table class="checks-table" style="margin-top:1.5rem">
+          <thead><tr><th>Check</th><th>Evaluator</th><th>Threshold</th><th>Scores on</th></tr></thead>
+          <tbody>
+            <tr><td>Transparency</td><td><code class="inline-code">transparency_by_design_check</code></td><td>0.85</td><td style="color:var(--text-muted)">AI identification clarity, disclosure prominence, non-technical understandability</td></tr>
+            <tr><td>Risk Management</td><td><code class="inline-code">risk_management_system_check</code></td><td>0.85</td><td style="color:var(--text-muted)">Risk completeness, mitigation depth, lifecycle coverage, vulnerable groups</td></tr>
+            <tr><td>Human Oversight</td><td><code class="inline-code">intervention_capability_check</code></td><td>0.90</td><td style="color:var(--text-muted)">Intervention mechanisms, override clarity, operator comprehensibility</td></tr>
+            <tr><td>Technical Docs</td><td><code class="inline-code">technical_documentation_check</code></td><td>0.90</td><td style="color:var(--text-muted)">All five Annex IV elements: system description, training data, metrics, limitations, oversight</td></tr>
+          </tbody>
+        </table>
+        <div class="callout callout-warning" style="margin-top:1.5rem">
+          <strong>Fallback:</strong> If the LLM call fails for any reason, the check automatically falls back to the static result and appends <code class="inline-code">(LLM unavailable &mdash; static fallback used)</code> to the remediation hint. Your pipeline never breaks due to an LLM outage.
+        </div>
+        <h3>Supported backends</h3>
+        <ul>
+          <li><strong>Local (Ollama):</strong> gemma2:2b, gemma2:9b, llama3.2:3b, mistral:7b &mdash; configured by <code class="inline-code">raiflow init</code></li>
+          <li><strong>API:</strong> Google Gemini 1.5 Flash/Pro, OpenAI GPT-4o/mini &mdash; set <code class="inline-code">GEMMA_API_KEY</code> or <code class="inline-code">OPENAI_API_KEY</code></li>
+        </ul>
+      </div>
+
+      <!-- GitHub Actions -->
+      <div class="docs-section" id="github-actions">
+        <h2>GitHub Actions Integration</h2>
+        <p><code class="inline-code">raiflow init</code> drops a ready-to-use workflow at <code class="inline-code">.github/workflows/rai-compliance.yml</code> with four jobs:</p>
+        <table class="checks-table" style="margin-top:1.5rem">
+          <thead><tr><th>Job</th><th>Stage</th><th>Blocks on failure</th></tr></thead>
+          <tbody>
+            <tr><td><code class="inline-code">pre-commit-checks</code></td><td>pre-commit</td><td style="color:var(--text-muted)">PR merge</td></tr>
+            <tr><td><code class="inline-code">compliance-gate</code></td><td>ci</td><td style="color:var(--text-muted)">Build</td></tr>
+            <tr><td><code class="inline-code">build-and-sign</code></td><td>&mdash;</td><td style="color:var(--text-muted)">Signed artifact manifest</td></tr>
+            <tr><td><code class="inline-code">deploy-gate</code></td><td>pre-deploy</td><td style="color:var(--text-muted)">Deployment</td></tr>
+          </tbody>
+        </table>
+        <div class="code-window" style="margin:1.5rem 0">
+          <div class="code-titlebar"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span><span class="code-filename">rai-compliance.yml (excerpt)</span></div>
+          <div class="code-body"><pre>- name: Run compliance gate
+  run: raiflow check --stage ci --no-dashboard
+  env:
+    RAIFLOW_MOCK_LLM: <span class="string">"true"</span>   <span class="comment"># mock LLM in CI if no API key</span>
+
+<span class="comment"># With semantic checks (add your API key as a repo secret)</span>
+- name: Run semantic compliance gate
+  run: raiflow check --stage ci --enable-llm-checks --no-dashboard
+  env:
+    GEMMA_API_KEY: <span class="string">${{ secrets.GEMMA_API_KEY }}</span></pre></div>
+        </div>
+        <div class="callout callout-info">
+          <strong>CI auto-detection:</strong> In CI environments (<code class="inline-code">CI=true</code> or no TTY), the browser dashboard is automatically suppressed &mdash; no extra flags needed. The <code class="inline-code">--no-dashboard</code> flag is explicit but redundant in CI.
+        </div>
+      </div>
+
+      <!-- Dashboard -->
+      <div class="docs-section" id="dashboard">
+        <h2>Live Dashboard</h2>
+        <p>Running <code class="inline-code">raiflow check --stage ci</code> (without <code class="inline-code">--no-dashboard</code>) opens a browser dashboard at <code class="inline-code">http://127.0.0.1:8000/</code>.</p>
+        <ul>
+          <li>Select pipeline stage and click <strong>Run Checks</strong> to trigger a live run</li>
+          <li>Results stream in real-time via Server-Sent Events (SSE)</li>
+          <li>Per-article cards with pass/fail badges, scores, and remediation hints</li>
+          <li>Click any card for detailed regulatory context and Annex IV citations</li>
+          <li>Overall compliance score and risk level (Low / Medium / High / Critical)</li>
+          <li><strong>Download Report</strong> exports <code class="inline-code">raiflow-report-&lt;timestamp&gt;.json</code></li>
+        </ul>
+      </div>
+
+      <!-- Report -->
+      <div class="docs-section" id="report">
+        <h2>Compliance Report</h2>
+        <p>Every run writes a JSON report to <code class="inline-code">raiflow-report.json</code> (configurable via <code class="inline-code">--output</code>). The report schema is stable across versions.</p>
+        <div class="code-window" style="margin:1.5rem 0">
+          <div class="code-titlebar"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span><span class="code-filename">raiflow-report.json</span></div>
+          <div class="code-body"><pre>{
+  <span class="string">"schema_version"</span>: <span class="string">"1.0"</span>,
+  <span class="string">"generated_at"</span>: <span class="string">"2026-04-17T12:00:00+00:00"</span>,
+  <span class="string">"git_sha"</span>: <span class="string">"abc1234"</span>,
+  <span class="string">"stage"</span>: <span class="string">"ci"</span>,
+  <span class="string">"system_name"</span>: <span class="string">"my-rag-app"</span>,
+  <span class="string">"overall_status"</span>: <span class="string">"pass"</span>,
+  <span class="string">"evaluation_mode"</span>: <span class="string">"static"</span>,  <span class="comment">// or "semantic"</span>
+  <span class="string">"checks"</span>: [
+    {
+      <span class="string">"article_id"</span>: <span class="string">"Article 13"</span>,
+      <span class="string">"rule_id"</span>: <span class="string">"ART13-1"</span>,
+      <span class="string">"check_name"</span>: <span class="string">"Transparency by Design"</span>,
+      <span class="string">"status"</span>: <span class="string">"pass"</span>,
+      <span class="string">"score"</span>: 1.0,
+      <span class="string">"threshold"</span>: 1.0,
+      <span class="string">"remediation_hint"</span>: <span class="string">""</span>
+    }
+  ]
+}</pre></div>
+        </div>
+        <p>The <code class="inline-code">evaluation_mode</code> field is <code class="inline-code">"semantic"</code> when <code class="inline-code">--enable-llm-checks</code> was used, <code class="inline-code">"static"</code> otherwise &mdash; useful for audit trails.</p>
+      </div>
+
+    </main>
   </div>
-</header>
+</div>
 
-<sea>
-        <a href="index.html#how-it-works">How it works</a>
-        <a href="docs.html" cel="stylesheet" href="style.css">
-  <link rel="icon" type="image/png" href="assets/banner.png">
-</head>
-<body>
-
-<header>
+<footer>
   <div class="container">
-    <nav>
+    <div class="footer-inner">
       <a href="index.html" class="logo-text">RaiFlow</a>
-      <div class="nav-links">
-        <a href="index.html#features">Features</<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Documentation — RaiFlow</title>
-  <meta name="description" content="Full documentation for RaiFlow — installation, CLI reference, manifest schema, and LLM evaluation.">
-  <link r
+      <div class="footer-links">
+        <a href="docs.html">Documentation</a>
+        <a href="contribute.html">Contribute</a>
+        <a href="https://github.com/Agicademia/RaiFlow" target="_blank">GitHub</a>
+        <a href="https://pypi.org/project/raiflow/" target="_blank">PyPI</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 Agicademia. MIT License. Not legal advice.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
