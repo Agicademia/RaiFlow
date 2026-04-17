@@ -1,172 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RaiFlow — EU AI Act Compliance Gate</title>
-  <meta name="description" content="One command to scaffold, check, and enforce EU AI Act compliance across your entire AI/ML CI/CD pipeline.">
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/png" href="assets/raiflow-icon.png">
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RaiFlow — EU AI Act Compliance Gate</title>
+    <meta name="description"
+        content="One command to scaffold, check, and enforce EU AI Act compliance across your entire AI/ML CI/CD pipeline.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="assets/raiflow-icon.png">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
+
 <body>
 
-<header>
-  <div class="container">
-    <nav>
-      <a href="index.html" class="logo-text">RaiFlow</a>
-      <div class="nav-links">
-        <a href="#features">Features</a>
-        <a href="#how-it-works">How it works</a>
-        <a href="docs.html">Docs</a>
-        <a href="contribute.html">Contribute</a>
-        <a href="https://github.com/Agicademia/RaiFlow" target="_blank" class="btn-nav">GitHub</a>
-      </div>
-    </nav>
-  </div>
-</header>
-
-<!-- Hero -->
-<section class="hero">
-  <div class="hero-glow"></div>
-  <div class="container">
-    <div class="hero-logo-wrap">
-      <img src="assets/banner.png" alt="RaiFlow" class="hero-logo">
-    </div>
-    <h1>Compliance-as-Code for<br><span>AI Regulatory Frameworks</span></h1>
-    <p class="hero-sub">One command to scaffold, check, and enforce regulatory compliance across your entire AI/ML CI/CD pipeline. Articles 9–14, fully automated.</p>
-    <div class="cta-group">
-      <a href="docs.html#installation" class="btn btn-primary">Get Started</a>
-      <a href="docs.html" class="btn btn-outline">Read the Docs</a>
-      <a href="https://github.com/Agicademia/RaiFlow" target="_blank" class="btn btn-outline">View on GitHub</a>
-    </div>
-    <div class="hero-badges">
-      <span class="badge badge-green"><i data-lucide="check" style="width:12px;height:12px;stroke-width:2.5;vertical-align:middle;margin-right:2px"></i> MIT License</span>
-      <span class="badge badge-purple">EU AI Act 2024/1689</span>
-      <span class="badge badge-yellow">Python 3.9+</span>
-      <span class="badge">pip install raiflow</span>
-    </div>
-  </div>
-</section>
-
-<!-- Stats -->
-<div class="stats-bar">
-  <div class="container">
-    <div class="stats-grid">
-      <div class="stat-item">
-        <div class="stat-num">6</div>
-        <div class="stat-label">EU AI Articles covered (9–14)</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">8</div>
-        <div class="stat-label">Compliance checks</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">4</div>
-        <div class="stat-label">Pipeline stages</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">0</div>
-        <div class="stat-label">Config to block CI on failure</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Features -->
-<section class="features" id="features">
-  <div class="container">
-    <div class="features-header">
-      <div class="section-label">Capabilities</div>
-      <h2 class="section-title">Everything you need for AI compliance</h2>
-      <p class="section-sub">From your first commit to production deployment, RaiFlow keeps you on the right side of the EU AI Act.</p>
-    </div>
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="feature-icon"><i data-lucide="scan-search"></i></div>
-        <h3>Zero-Friction Init</h3>
-        <p>Scans your project for AI framework imports (LangChain, Ollama, OpenAI, Transformers...), infers your risk level, and writes a pre-filled <code class="inline-code">raiflow.yaml</code> and GitHub Actions workflow in seconds.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i data-lucide="shield-check"></i></div>
-        <h3>Static Compliance Gate</h3>
-        <p>Eight checks (MVP) against your manifest covering Articles 9–14, risk assessment existence, disclosure flags, oversight endpoints, logging middleware, bias detection, and toxicity testing.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i data-lucide="brain-circuit"></i></div>
-        <h3>Semantic LLM Evaluation</h3>
-        <p>Pass <code class="inline-code">--enable-llm-checks</code> to go beyond file existence, score your actual documentation quality against Annex IV criteria using a local or cloud LLM.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i data-lucide="layout-dashboard"></i></div>
-        <h3>Live Dashboard</h3>
-        <p>A real-time browser dashboard streams check results as they complete via SSE. Download JSON reports, explore per-article regulatory citations, and see your compliance score at a glance.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i data-lucide="git-branch"></i></div>
-        <h3>CI/CD Native</h3>
-        <p>Four pipeline stages (pre-commit → ci → pre-deploy → post-deploy) with auto-generated GitHub Actions workflows. Blocks merges and deployments on failure. Zero dashboard in CI.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i data-lucide="scroll-text"></i></div>
-        <h3>De Jure Engine</h3>
-        <p>An iterative LLM-as-a-Judge pipeline that interprets legal text and extracts machine-readable compliance rules directly from regulatory documents.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- How it works -->
-<section class="how-it-works" id="how-it-works">
-  <div class="container">
-    <div class="section-label">Workflow</div>
-    <h2 class="section-title">From zero to compliant in minutes</h2>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-content">
-          <h3>Install and initialise</h3>
-          <p>Run <code class="inline-code">pip install raiflow</code> then <code class="inline-code">raiflow init</code> in your project root. RaiFlow scans your Python files, infers your EU AI Act risk level, and writes <code class="inline-code">raiflow.yaml</code> plus a GitHub Actions workflow.</p>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo-text">RaiFlow</a>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#how-it-works">How it works</a>
+                    <a href="docs.html">Docs</a>
+                    <a href="contribute.html">Contribute</a>
+                    <a href="https://github.com/Agicademia/RaiFlow" target="_blank" class="btn-nav">GitHub</a>
+                </div>
+            </nav>
         </div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-content">
-          <h3>Fill your manifest</h3>
-          <p>The generated <code class="inline-code">raiflow.yaml</code> is pre-filled and commented. Add your risk assessment path, override endpoints, dataset path, and any other evidence your checks require.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-content">
-          <h3>Run checks</h3>
-          <p><code class="inline-code">raiflow check --stage ci</code> opens a live dashboard and streams results. Each check returns a score, threshold, status, and a precise remediation hint when it fails.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-content">
-          <h3>Push — CI does the rest</h3>
-          <p>The auto-generated workflow runs on every pull request. Compliance failures block merges and deployments. A signed JSON report is attached as a build artifact for audit trail purposes.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    </header>
 
-<!-- Quick start code -->
-<section class="code-section" id="quickstart">
-  <div class="container">
-    <div class="section-label">Quick Start</div>
-    <h2 class="section-title" style="margin-bottom:2rem;">Up and running in 60 seconds</h2>
-    <div class="code-window">
-      <div class="code-titlebar">
-        <span class="dot dot-red"></span>
-        <span class="dot dot-yellow"></span>
-        <span class="dot dot-green"></span>
-        <span class="code-filename">terminal</span>
-      </div>
-      <div class="code-body"><pre><span class="comment"># 1. Install</span>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-glow"></div>
+        <div class="container">
+            <div class="hero-logo-wrap">
+                <img src="assets/banner.png" alt="RaiFlow" class="hero-logo">
+            </div>
+            <h1>Compliance-as-Code for<br><span>AI Regulatory Frameworks</span></h1>
+            <p class="hero-sub">One command to scaffold, check, and enforce regulatory compliance across your entire
+                AI/ML CI/CD pipeline. Articles 9–14, fully automated.</p>
+            <div class="cta-group">
+                <a href="docs.html#installation" class="btn btn-primary">Get Started</a>
+                <a href="docs.html" class="btn btn-outline">Read the Docs</a>
+                <a href="https://github.com/Agicademia/RaiFlow" target="_blank" class="btn btn-outline">View on
+                    GitHub</a>
+            </div>
+            <div class="hero-badges">
+                <span class="badge badge-green"><i data-lucide="check"
+                        style="width:12px;height:12px;stroke-width:2.5;vertical-align:middle;margin-right:2px"></i> MIT
+                    License</span>
+                <span class="badge badge-purple">EU AI Act 2024/1689</span>
+                <span class="badge badge-yellow">Python 3.9+</span>
+                <span class="badge">pip install raiflow</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-num">6</div>
+                    <div class="stat-label">EU AI Articles covered (9–14)</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">8</div>
+                    <div class="stat-label">Compliance checks</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">4</div>
+                    <div class="stat-label">Pipeline stages</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">0</div>
+                    <div class="stat-label">Config to block CI on failure</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="features-header">
+                <div class="section-label">Capabilities</div>
+                <h2 class="section-title">Everything you need for AI compliance</h2>
+                <p class="section-sub">From your first commit to production deployment, RaiFlow keeps you on the right
+                    side of the EU AI Act.</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="scan-search"></i></div>
+                    <h3>Zero-Friction Init</h3>
+                    <p>Scans your project for AI framework imports (LangChain, Ollama, OpenAI, Transformers...), infers
+                        your risk level, and writes a pre-filled <code class="inline-code">raiflow.yaml</code> and
+                        GitHub Actions workflow in seconds.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="shield-check"></i></div>
+                    <h3>Static Compliance Gate</h3>
+                    <p>Eight checks (MVP) against your manifest covering Articles 9–14, risk assessment existence,
+                        disclosure flags, oversight endpoints, logging middleware, bias detection, and toxicity testing.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="brain-circuit"></i></div>
+                    <h3>Semantic LLM Evaluation</h3>
+                    <p>Pass <code class="inline-code">--enable-llm-checks</code> to go beyond file existence, score your
+                        actual documentation quality against Annex IV criteria using a local or cloud LLM.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="layout-dashboard"></i></div>
+                    <h3>Live Dashboard</h3>
+                    <p>A real-time browser dashboard streams check results as they complete via SSE. Download JSON
+                        reports, explore per-article regulatory citations, and see your compliance score at a glance.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="git-branch"></i></div>
+                    <h3>CI/CD Native</h3>
+                    <p>Four pipeline stages (pre-commit → ci → pre-deploy → post-deploy) with auto-generated GitHub
+                        Actions workflows. Blocks merges and deployments on failure. Zero dashboard in CI.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="scroll-text"></i></div>
+                    <h3>De Jure Engine</h3>
+                    <p>An iterative LLM-as-a-Judge pipeline that interprets legal text and extracts machine-readable
+                        compliance rules directly from regulatory documents.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-label">Workflow</div>
+            <h2 class="section-title">From zero to compliant in minutes</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h3>Install and initialise</h3>
+                        <p>Run <code class="inline-code">pip install raiflow</code> then <code
+                                class="inline-code">raiflow init</code> in your project root. RaiFlow scans your Python
+                            files, infers your EU AI Act risk level, and writes <code
+                                class="inline-code">raiflow.yaml</code> plus a GitHub Actions workflow.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h3>Fill your manifest</h3>
+                        <p>The generated <code class="inline-code">raiflow.yaml</code> is pre-filled and commented. Add
+                            your risk assessment path, override endpoints, dataset path, and any other evidence your
+                            checks require.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h3>Run checks</h3>
+                        <p><code class="inline-code">raiflow check --stage ci</code> opens a live dashboard and streams
+                            results. Each check returns a score, threshold, status, and a precise remediation hint when
+                            it fails.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <h3>Push — CI does the rest</h3>
+                        <p>The auto-generated workflow runs on every pull request. Compliance failures block merges and
+                            deployments. A signed JSON report is attached as a build artifact for audit trail purposes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick start code -->
+    <section class="code-section" id="quickstart">
+        <div class="container">
+            <div class="section-label">Quick Start</div>
+            <h2 class="section-title" style="margin-bottom:2rem;">Up and running in 60 seconds</h2>
+            <div class="code-window">
+                <div class="code-titlebar">
+                    <span class="dot dot-red"></span>
+                    <span class="dot dot-yellow"></span>
+                    <span class="dot dot-green"></span>
+                    <span class="code-filename">terminal</span>
+                </div>
+                <div class="code-body">
+                    <pre><span class="comment"># 1. Install</span>
 <span class="cmd">pip install</span> <span class="string">raiflow</span>
 
 <span class="comment"># 2. Scaffold manifest + GitHub Actions workflow</span>
@@ -181,150 +208,144 @@
 <span class="comment"># 5. Semantic evaluation with an LLM (Ollama or API key)</span>
 <span class="cmd">raiflow</span> <span class="keyword">check</span> <span class="flag">--stage</span> ci <span class="flag">--enable-llm-checks</span>
 
-<span class="output">All checks passed (8 checks, stage=ci)</span></pre></div>
-    </div>
-  </div>
-</section>
-
-<!-- Checks table -->
-<section class="checks-section" id="checks">
-  <div class="container">
-    <div class="section-label">Coverage</div>
-    <h2 class="section-title">What gets checked</h2>
-    <table class="checks-table">
-      <thead>
-        <tr>
-          <th>Check</th>
-          <th>Article</th>
-          <th>What it verifies</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Banned Model Scan</strong></td>
-          <td><span class="tag tag-internal">Internal</span></td>
-          <td style="color:var(--text-muted)">Model identifier not on your blocklist</td>
-        </tr>
-        <tr>
-          <td><strong>Transparency by Design</strong></td>
-          <td><span class="tag tag-article">Article 13</span></td>
-          <td style="color:var(--text-muted)">Disclosure flag set; semantic: disclosure language clarity and prominence</td>
-        </tr>
-        <tr>
-          <td><strong>Risk Management Documentation</strong></td>
-          <td><span class="tag tag-article">Article 9</span></td>
-          <td style="color:var(--text-muted)">Risk assessment document exists; semantic: completeness, lifecycle coverage, vulnerable groups</td>
-        </tr>
-        <tr>
-          <td><strong>Human Oversight Endpoints</strong></td>
-          <td><span class="tag tag-article">Article 14</span></td>
-          <td style="color:var(--text-muted)">Override/halt endpoints found in source; semantic: intervention clarity</td>
-        </tr>
-        <tr>
-          <td><strong>Logging Middleware Active</strong></td>
-          <td><span class="tag tag-article">Article 12</span></td>
-          <td style="color:var(--text-muted)">Logging middleware flag set in manifest</td>
-        </tr>
-        <tr>
-          <td><strong>Technical Documentation</strong></td>
-          <td><span class="tag tag-article">Article 11</span></td>
-          <td style="color:var(--text-muted)">Tech doc file exists; semantic: all five Annex IV elements covered</td>
-        </tr>
-        <tr>
-          <td><strong>Bias Detection</strong></td>
-          <td><span class="tag tag-article">Article 10</span></td>
-          <td style="color:var(--text-muted)">Dataset scanned for bias on declared protected attributes</td>
-        </tr>
-        <tr>
-          <td><strong>Robustness / Toxicity</strong></td>
-          <td><span class="tag tag-article">Article 10</span></td>
-          <td style="color:var(--text-muted)">Red-team prompts tested against configurable toxicity threshold</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- Dashboard showcase -->
-<section class="showcase-section" id="showcase">
-  <div class="container">
-    <div class="section-label">Live Dashboard</div>
-    <h2 class="section-title">See it in action</h2>
-    <p class="section-sub" style="margin-bottom:3rem">A real-time compliance workbench that streams results as checks complete, right in your browser.</p>
-
-    <!-- Hero screenshot -->
-    <div class="showcase-hero">
-      <div class="showcase-browser-bar">
-        <span class="dot dot-red"></span>
-        <span class="dot dot-yellow"></span>
-        <span class="dot dot-green"></span>
-        <span class="showcase-url">http://127.0.0.1:8000</span>
-      </div>
-      <img src="assets/compliance-checks.png" alt="RaiFlow compliance checks dashboard" class="showcase-img-hero" loading="lazy">
-    </div>
-
-    <!-- Detail shots: horizontal scroll gallery, each image at natural size -->
-    <div class="showcase-gallery">
-      <div class="showcase-gallery-card">
-        <div class="showcase-browser-bar showcase-browser-bar--sm">
-          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+<span class="output">All checks passed (8 checks, stage=ci)</span></pre>
+                </div>
+            </div>
         </div>
-        <img src="assets/pipeline-stage.png" alt="Pipeline stage selector" loading="lazy">
-        <div class="showcase-caption">
-          <div class="showcase-caption-title">Pipeline stage selector</div>
-          <div class="showcase-caption-sub">Choose pre-commit, ci, pre-deploy, or post-deploy. Each stage runs the right subset of checks automatically.</div>
-        </div>
-      </div>
-      <div class="showcase-gallery-card">
-        <div class="showcase-browser-bar showcase-browser-bar--sm">
-          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
-        </div>
-        <img src="assets/check-scores.png" alt="Check scores and risk level" loading="lazy">
-        <div class="showcase-caption">
-          <div class="showcase-caption-title">Scores and risk level</div>
-          <div class="showcase-caption-sub">Every check returns a numeric score, threshold, and pass/fail status. Overall risk level updates live as results stream in.</div>
-        </div>
-      </div>
-      <div class="showcase-gallery-card">
-        <div class="showcase-browser-bar showcase-browser-bar--sm">
-          <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
-        </div>
-        <img src="assets/frameworks.png" alt="Regulatory framework selector" loading="lazy">
-        <div class="showcase-caption">
-          <div class="showcase-caption-title">Framework selector</div>
-          <div class="showcase-caption-sub">EU AI Act is live. NIST AI RMF and ISO 42001 are coming — switch frameworks without changing your pipeline.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- CTA -->
-<section class="cta-section">
-  <div class="container">
-    <h2>Ready to ship compliant AI?</h2>
-    <p>Get started in under a minute. No account required.</p>
-    <div class="cta-group">
-      <a href="docs.html" class="btn btn-primary">Read the Docs</a>
-      <a href="contribute.html" class="btn btn-outline">Contribute</a>
-    </div>
-  </div>
-</section>
+    <!-- Checks table -->
+    <section class="checks-section" id="checks">
+        <div class="container">
+            <div class="section-label">Coverage</div>
+            <h2 class="section-title">What gets checked</h2>
+            <table class="checks-table">
+                <thead>
+                    <tr>
+                        <th>Check</th>
+                        <th>Article</th>
+                        <th>What it verifies</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Banned Model Scan</strong></td>
+                        <td><span class="tag tag-internal">Internal</span></td>
+                        <td style="color:var(--text-muted)">Model identifier not on your blocklist</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Transparency by Design</strong></td>
+                        <td><span class="tag tag-article">Article 13</span></td>
+                        <td style="color:var(--text-muted)">Disclosure flag set; semantic: disclosure language clarity
+                            and prominence</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Risk Management Documentation</strong></td>
+                        <td><span class="tag tag-article">Article 9</span></td>
+                        <td style="color:var(--text-muted)">Risk assessment document exists; semantic: completeness,
+                            lifecycle coverage, vulnerable groups</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Human Oversight Endpoints</strong></td>
+                        <td><span class="tag tag-article">Article 14</span></td>
+                        <td style="color:var(--text-muted)">Override/halt endpoints found in source; semantic:
+                            intervention clarity</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Logging Middleware Active</strong></td>
+                        <td><span class="tag tag-article">Article 12</span></td>
+                        <td style="color:var(--text-muted)">Logging middleware flag set in manifest</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Technical Documentation</strong></td>
+                        <td><span class="tag tag-article">Article 11</span></td>
+                        <td style="color:var(--text-muted)">Tech doc file exists; semantic: all five Annex IV elements
+                            covered</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bias Detection</strong></td>
+                        <td><span class="tag tag-article">Article 10</span></td>
+                        <td style="color:var(--text-muted)">Dataset scanned for bias on declared protected attributes
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Robustness / Toxicity</strong></td>
+                        <td><span class="tag tag-article">Article 10</span></td>
+                        <td style="color:var(--text-muted)">Red-team prompts tested against configurable toxicity
+                            threshold</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-<footer>
-  <div class="container">
-    <div class="footer-inner">
-      <a href="index.html" class="logo-text">RaiFlow</a>
-      <div class="footer-links">
-        <a href="docs.html">Documentation</a>
-        <a href="contribute.html">Contribute</a>
-        <a href="https://github.com/Agicademia/RaiFlow" target="_blank">GitHub</a>
-      </div>
-      <p class="footer-copy">&copy; 2026 Agicademia. MIT License. Not legal advice.</p>
-    </div>
-  </div>
-</footer>
+    <!-- Dashboard showcase -->
+    <section class="showcase-section" id="showcase">
+        <div class="container">
+            <div class="section-label">Live Dashboard</div>
+            <h2 class="section-title">See it in action</h2>
+            <p class="section-sub" style="margin-bottom:3rem">A real-time compliance workbench that streams results as
+                checks complete, right in your browser.</p>
 
-<script>lucide.createIcons();</script>
+            <!-- Free-Form Floating Showcase -->
+            <!-- Hero Screenshot (The Main Event) -->
+            <div class="screenshot-hero-wrap">
+                <div class="screenshot-item item-hero">
+                    <img src="assets/compliance-checks.png" alt="Compliance Checks Overview">
+                    <span class="screenshot-cap">The Compliance Workbench</span>
+                </div>
+            </div>
+
+            <!-- The Detail Section (Hero + 2-Column Cloud) -->
+            <div class="screenshot-cloud bento-layout">
+                <!-- Anchor Item (Tallest) -->
+                <div class="screenshot-item item-sm item-2">
+                    <img src="assets/pipeline-stage.png" alt="Pipeline Stage Selection">
+                    <span class="screenshot-cap">Multi-Stage Control</span>
+                </div>
+
+                <!-- Vertical Stack (Smaller shots) -->
+                <div class="screenshot-stack">
+                    <div class="screenshot-item item-sm item-3">
+                        <img src="assets/check-scores.png" alt="Detailed Risk Scoring">
+                        <span class="screenshot-cap">Risk Scoring</span>
+                    </div>
+                    <div class="screenshot-item item-sm item-4">
+                        <img src="assets/frameworks.png" alt="Regulatory Frameworks">
+                        <span class="screenshot-cap">Policy Packs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to ship compliant AI?</h2>
+            <p>Get started in under a minute. No account required.</p>
+            <div class="cta-group">
+                <a href="docs.html" class="btn btn-primary">Read the Docs</a>
+                <a href="contribute.html" class="btn btn-outline">Contribute</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <a href="index.html" class="logo-text">RaiFlow</a>
+                <div class="footer-links">
+                    <a href="docs.html">Documentation</a>
+                    <a href="contribute.html">Contribute</a>
+                    <a href="https://github.com/Agicademia/RaiFlow" target="_blank">GitHub</a>
+                </div>
+                <p class="footer-copy">&copy; 2026 Agicademia. MIT License. Not legal advice.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>lucide.createIcons();</script>
 </body>
+
 </html>
