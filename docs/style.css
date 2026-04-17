@@ -682,9 +682,8 @@ footer { padding: 3rem 0; border-top: 1px solid var(--border); }
 
 .showcase-img-detail {
   width: 100%;
+  height: auto;
   display: block;
-  object-fit: cover;
-  object-position: top;
   border-bottom: 1px solid var(--border);
 }
 
