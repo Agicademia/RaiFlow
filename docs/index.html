@@ -7,6 +7,7 @@
   <meta name="description" content="One command to scaffold, check, and enforce EU AI Act compliance across your entire AI/ML CI/CD pipeline.">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/png" href="assets/banner.png">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
 
@@ -40,7 +41,7 @@
       <a href="https://github.com/Agicademia/RaiFlow" target="_blank" class="btn btn-outline">View on GitHub</a>
     </div>
     <div class="hero-badges">
-      <span class="badge badge-green">✓ MIT License</span>
+      <span class="badge badge-green"><i data-lucide="check" style="width:12px;height:12px;stroke-width:2.5;vertical-align:middle;margin-right:2px"></i> MIT License</span>
       <span class="badge badge-purple">EU AI Act 2024/1689</span>
       <span class="badge badge-yellow">Python 3.9+</span>
       <span class="badge">pip install raiflow</span>
@@ -82,32 +83,32 @@
     </div>
     <div class="feature-grid">
       <div class="feature-card">
-        <div class="feature-icon">🔍</div>
+        <div class="feature-icon"><i data-lucide="scan-search"></i></div>
         <h3>Zero-Friction Init</h3>
         <p>Scans your project for AI framework imports (LangChain, Ollama, OpenAI, Transformers...), infers your risk level, and writes a pre-filled <code class="inline-code">raiflow.yaml</code> and GitHub Actions workflow in seconds.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">🛡️</div>
+        <div class="feature-icon"><i data-lucide="shield-check"></i></div>
         <h3>Static Compliance Gate</h3>
         <p>Eight checks against your manifest covering Articles 9–14 — risk assessment existence, disclosure flags, oversight endpoints, logging middleware, bias detection, and toxicity testing.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">🧠</div>
+        <div class="feature-icon"><i data-lucide="brain-circuit"></i></div>
         <h3>Semantic LLM Evaluation</h3>
         <p>Pass <code class="inline-code">--enable-llm-checks</code> to go beyond file existence — score your actual documentation quality against Annex IV criteria using a local or cloud LLM.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">📊</div>
+        <div class="feature-icon"><i data-lucide="layout-dashboard"></i></div>
         <h3>Live Dashboard</h3>
         <p>A real-time browser dashboard streams check results as they complete via SSE. Download JSON reports, explore per-article regulatory citations, and see your compliance score at a glance.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">⚙️</div>
+        <div class="feature-icon"><i data-lucide="git-branch"></i></div>
         <h3>CI/CD Native</h3>
         <p>Four pipeline stages (pre-commit → ci → pre-deploy → post-deploy) with auto-generated GitHub Actions workflows. Blocks merges and deployments on failure. Zero dashboard in CI.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">⚖️</div>
+        <div class="feature-icon"><i data-lucide="scroll-text"></i></div>
         <h3>De Jure Engine</h3>
         <p>An iterative LLM-as-a-Judge pipeline that interprets legal text and extracts machine-readable compliance rules directly from regulatory documents.</p>
       </div>
@@ -180,7 +181,7 @@
 <span class="comment"># 5. Semantic evaluation with an LLM (Ollama or API key)</span>
 <span class="cmd">raiflow</span> <span class="keyword">check</span> <span class="flag">--stage</span> ci <span class="flag">--enable-llm-checks</span>
 
-<span class="output">✅  All checks passed (8 checks, stage=ci)</span></pre></div>
+<span class="output">All checks passed (8 checks, stage=ci)</span></pre></div>
     </div>
   </div>
 </section>
@@ -264,12 +265,12 @@
         <a href="docs.html">Documentation</a>
         <a href="contribute.html">Contribute</a>
         <a href="https://github.com/Agicademia/RaiFlow" target="_blank">GitHub</a>
-        <a href="https://pypi.org/project/raiflow/" target="_blank">PyPI</a>
       </div>
       <p class="footer-copy">&copy; 2026 Agicademia. MIT License. Not legal advice.</p>
     </div>
   </div>
 </footer>
 
+<script>lucide.createIcons();</script>
 </body>
 </html>

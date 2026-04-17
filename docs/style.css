@@ -315,6 +315,11 @@ nav { display: flex; justify-content: space-between; align-items: center; }
   font-size: 1.3rem;
   margin-bottom: 1.25rem;
 }
+.feature-icon svg {
+  width: 22px; height: 22px;
+  stroke: var(--primary-light);
+  stroke-width: 1.75;
+}
 .feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem; }
 .feature-card p  { color: var(--text-muted); font-size: 0.9rem; line-height: 1.65; }
 
@@ -560,6 +565,11 @@ footer { padding: 3rem 0; border-top: 1px solid var(--border); }
 }
 .contribute-card:hover { border-color: var(--border-light); transform: translateY(-3px); }
 .contribute-card .card-icon { font-size: 2rem; margin-bottom: 1rem; }
+.contribute-card .card-icon svg {
+  width: 28px; height: 28px;
+  stroke: var(--primary-light);
+  stroke-width: 1.75;
+}
 .contribute-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
 .contribute-card p  { color: var(--text-muted); font-size: 0.9rem; line-height: 1.65; }
 .contribute-card .card-link {
