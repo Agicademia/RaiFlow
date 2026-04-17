@@ -13,7 +13,7 @@
   --blue:#3b82f6; --purple:#8b5cf6; --green:#22c55e;
   --red:#ef4444; --amber:#f59e0b; --orange:#f97316;
   --text:#e2e8f0; --muted:#64748b;
-  --grad:linear-gradient(135deg,#3b82f6,#8b5cf6);
+  --grad:linear-gradient(135deg,#4a7c59,#a0784a);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -38,14 +38,14 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--
 .stage-list{display:flex;flex-direction:column;gap:5px}
 .stage-option{display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border-radius:9px;border:1px solid var(--border);cursor:pointer;transition:all .15s;background:transparent;width:100%;text-align:left}
 .stage-option:hover{border-color:var(--border2);background:rgba(255,255,255,.02)}
-.stage-option.selected{border-color:var(--blue);background:rgba(59,130,246,.07)}
-.stage-option input[type=radio]{margin-top:2px;accent-color:var(--blue);flex-shrink:0;cursor:pointer}
+.stage-option.selected{border-color:#4a7c59;background:rgba(74,124,89,.08)}
+.stage-option input[type=radio]{margin-top:2px;accent-color:#4a7c59;flex-shrink:0;cursor:pointer}
 .stage-option-body{display:flex;flex-direction:column;gap:2px}
 .stage-name{font-size:13px;font-weight:600}
 .stage-checks{font-size:11px;color:var(--muted);line-height:1.4}
 /* ── Run button ── */
 .btn-run{width:100%;padding:11px;background:var(--grad);border:none;color:white;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-run:hover:not(:disabled){opacity:.9;transform:translateY(-1px);box-shadow:0 6px 20px rgba(59,130,246,.3)}
+.btn-run:hover:not(:disabled){opacity:.9;transform:translateY(-1px);box-shadow:0 6px 20px rgba(74,124,89,.35)}
 .btn-run:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
 .spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:none}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -134,18 +134,18 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--
 .modal-section:last-child{margin-bottom:0}
 .modal-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
 .modal-text{font-size:14px;line-height:1.6;color:var(--text)}
-.modal-citation{font-size:12px;color:var(--blue);font-family:monospace;background:rgba(59,130,246,0.08);padding:8px 12px;border-radius:6px;border:1px solid rgba(59,130,246,0.2)}
+.modal-citation{font-size:12px;color:#6daa80;font-family:monospace;background:rgba(74,124,89,0.08);padding:8px 12px;border-radius:6px;border:1px solid rgba(74,124,89,0.2)}
 /* ── Framework selector ── */
 .framework-list{display:flex;flex-direction:column;gap:4px}
 .framework-option{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 11px;border-radius:9px;border:1px solid var(--border);cursor:pointer;transition:all .15s;background:transparent;width:100%;text-align:left}
 .framework-option:hover:not(.disabled){border-color:var(--border2);background:rgba(255,255,255,.02)}
-.framework-option.selected{border-color:var(--purple);background:rgba(139,92,246,.07)}
+.framework-option.selected{border-color:#a0784a;background:rgba(160,120,74,.08)}
 .framework-option.disabled{opacity:.45;cursor:not-allowed}
-.framework-option input[type=radio]{accent-color:var(--purple);flex-shrink:0;cursor:pointer}
+.framework-option input[type=radio]{accent-color:#a0784a;flex-shrink:0;cursor:pointer}
 .framework-option.disabled input[type=radio]{cursor:not-allowed}
 .framework-name{font-size:12px;font-weight:600}
 .framework-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;white-space:nowrap;flex-shrink:0}
-.framework-badge.active{background:rgba(139,92,246,.15);color:var(--purple);border:1px solid rgba(139,92,246,.3)}
+.framework-badge.active{background:rgba(160,120,74,.15);color:#c49a6a;border:1px solid rgba(160,120,74,.3)}
 .framework-badge.soon{background:rgba(100,116,139,.12);color:var(--muted);border:1px solid rgba(100,116,139,.2)}
 </style>
 </head>
@@ -154,17 +154,13 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--
 <!-- ── Topbar ── -->
 <nav class="topbar">
   <div class="logo">
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <rect width="28" height="28" rx="8" fill="url(#lg)"/>
-      <path d="M8 14h4l2-5 4 10 2-5h4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <defs><linearGradient id="lg" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
-    </svg>
+    <img src="/raiflow-icon.svg" width="32" height="32" alt="RaiFlow" style="border-radius:7px;object-fit:contain">
     <span class="logo-text">RaiFlow</span>
   </div>
   <div class="status-pill">
     <span class="dot" id="status-dot"></span>
     <span id="status-text">Idle</span>
-    <button id="btn-download" onclick="downloadReport()" style="display:none;margin-left:14px;background:none;border:1px solid var(--border2);color:var(--muted);padding:4px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">⬇ Download Report</button>
+    <button id="btn-download" onclick="downloadReport()" style="display:none;margin-left:14px;background:none;border:1px solid var(--border2);color:var(--muted);padding:4px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='#6daa80';this.style.color='#6daa80'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">&#8595; Download Report</button>
   </div>
 </nav>
 
@@ -288,7 +284,11 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--
     <!-- Cards / empty state -->
     <div class="cards-section" id="cards-section">
       <div class="empty-state" id="empty-state">
-        <div class="empty-icon">🛡️</div>
+        <div class="empty-icon">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#4a7c59" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
         <div class="empty-title">Ready to run compliance checks</div>
         <div class="empty-sub">Select a pipeline stage on the left and click <strong>Run Checks</strong> to start streaming results.</div>
       </div>

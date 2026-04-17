@@ -95,6 +95,15 @@ class DashboardServer:
         async def serve_index():
             return FileResponse(str(_DASHBOARD_HTML), media_type="text/html")
 
+        @app.get("/raiflow-icon.svg")
+        async def serve_icon():
+            icon_path = Path(__file__).resolve().parent.parent / "docs" / "assets" / "raiflow-icon.png"
+            if icon_path.exists():
+                return FileResponse(str(icon_path), media_type="image/png")
+            # fallback: serve the banner
+            banner = Path(__file__).resolve().parent / "dashboard" / "raiflow-icon.png"
+            return FileResponse(str(banner), media_type="image/png")
+
         @app.get("/api/run-state")
         async def run_state():
             data = dataclasses.asdict(self._run_state)
