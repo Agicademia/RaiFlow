@@ -104,6 +104,20 @@ class DashboardServer:
             banner = Path(__file__).resolve().parent / "dashboard" / "raiflow-icon.png"
             return FileResponse(str(banner), media_type="image/png")
 
+        @app.get("/api/audit-trail")
+        async def audit_trail():
+            """Return the interceptor audit trail from raiflow_audit_trail.json."""
+            from fastapi.responses import JSONResponse
+            log_path = Path("raiflow_audit_trail.json")
+            if not log_path.exists():
+                return JSONResponse(content={"events": [], "total": 0})
+            try:
+                import json as _json
+                events = _json.loads(log_path.read_text(encoding="utf-8"))
+                return JSONResponse(content={"events": events[-200:], "total": len(events)})
+            except Exception as exc:
+                return JSONResponse(content={"events": [], "total": 0, "error": str(exc)})
+
         @app.get("/api/run-state")
         async def run_state():
             data = dataclasses.asdict(self._run_state)

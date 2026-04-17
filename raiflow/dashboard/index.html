@@ -49,15 +49,33 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--
 .btn-run:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
 .spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:none}
 @keyframes spin{to{transform:rotate(360deg)}}
-/* ── Score banner ── */
-.score-banner{background:var(--surface2);border:1px solid var(--border2);border-radius:13px;padding:16px 14px;display:flex;flex-direction:column;gap:12px}
-.score-top{display:flex;align-items:center;gap:12px}
-.score-circle{width:68px;height:68px;border-radius:50%;border:3px solid var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .4s}
-.score-circle.low{border-color:var(--green)}.score-circle.medium{border-color:var(--amber)}.score-circle.high{border-color:var(--orange)}.score-circle.critical{border-color:var(--red)}
-.score-num{font-size:20px;font-weight:800;font-family:monospace;line-height:1}
-.score-pct{font-size:10px;color:var(--muted)}
-.score-right{display:flex;flex-direction:column;gap:4px}
-.risk-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px}
+/* ── Tab nav ── */
+.tab-nav{display:flex;gap:4px;align-items:center;margin-left:24px}
+.tab-btn{background:none;border:1px solid transparent;color:var(--muted);padding:5px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.tab-btn:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.tab-btn.active{color:#6daa80;border-color:rgba(74,124,89,.4);background:rgba(74,124,89,.08)}
+/* ── Audit trail panel ── */
+.audit-panel{display:none;flex:1;overflow-y:auto;padding:16px;flex-direction:column;gap:10px}
+.audit-panel.visible{display:flex}
+.audit-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;color:var(--muted);text-align:center;padding:40px}
+.audit-empty-title{font-size:16px;font-weight:700;color:var(--text)}
+.audit-empty-sub{font-size:12px;line-height:1.6;max-width:380px}
+.audit-stats-bar{display:flex;gap:16px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:9px;font-size:12px;flex-shrink:0}
+.audit-stat{display:flex;flex-direction:column;gap:2px}
+.audit-stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.audit-stat-value{font-size:15px;font-weight:700;font-family:monospace}
+.audit-event{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px 14px;display:flex;flex-direction:column;gap:7px;animation:fadein .2s ease}
+.audit-event.pass{border-color:rgba(34,197,94,.3)}.audit-event.fail{border-color:rgba(239,68,68,.3)}
+.audit-event-header{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.audit-event-path{font-family:monospace;font-size:12px;font-weight:600;color:var(--text)}
+.audit-event-ts{font-size:10px;color:var(--muted);font-family:monospace;white-space:nowrap}
+.audit-scores{display:flex;gap:12px;flex-wrap:wrap}
+.audit-score-chip{font-size:11px;padding:2px 8px;border-radius:99px;font-weight:600;font-family:monospace}
+.audit-score-chip.ok{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25)}
+.audit-score-chip.warn{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.25)}
+.audit-violations{font-size:11px;color:var(--red);background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:6px;padding:6px 10px}
+.audit-refresh-btn{background:none;border:1px solid var(--border2);color:var(--muted);padding:4px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;margin-left:auto}
+.audit-refresh-btn:hover{border-color:#6daa80;color:#6daa80}
 .risk-badge.low{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3)}
 .risk-badge.medium{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
 .risk-badge.high{background:rgba(249,115,22,.15);color:var(--orange);border:1px solid rgba(249,115,22,.3)}
@@ -156,6 +174,10 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--
   <div class="logo">
     <img src="/raiflow-icon.svg" width="32" height="32" alt="RaiFlow" style="border-radius:7px;object-fit:contain">
     <span class="logo-text">RaiFlow</span>
+  </div>
+  <div class="tab-nav">
+    <button class="tab-btn active" id="tab-compliance" onclick="switchTab('compliance')">Compliance Gate</button>
+    <button class="tab-btn" id="tab-audit" onclick="switchTab('audit')">Audit Trail</button>
   </div>
   <div class="status-pill">
     <span class="dot" id="status-dot"></span>
@@ -293,6 +315,24 @@ body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--
         <div class="empty-sub">Select a pipeline stage on the left and click <strong>Run Checks</strong> to start streaming results.</div>
       </div>
       <div class="cards-grid" id="cards-grid" style="display:none"></div>
+    </div>
+
+    <!-- Audit trail panel (shown when Audit Trail tab is active) -->
+    <div class="audit-panel" id="audit-panel">
+      <div class="audit-empty" id="audit-empty">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4a7c59" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;margin-bottom:4px">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>
+        </svg>
+        <div class="audit-empty-title">No audit events yet</div>
+        <div class="audit-empty-sub">Start the interceptor proxy with <code style="background:rgba(255,255,255,.06);padding:1px 6px;border-radius:4px;font-size:11px">raiflow intercept --target http://localhost:7860</code> then point your client at the proxy. Every request/response will appear here.</div>
+      </div>
+      <div id="audit-content" style="display:none;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+          <div class="audit-stats-bar" id="audit-stats-bar" style="flex:1"></div>
+          <button class="audit-refresh-btn" onclick="loadAuditTrail()">&#8635; Refresh</button>
+        </div>
+        <div id="audit-events-list" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
     </div>
 
   </main>
@@ -818,6 +858,96 @@ document.addEventListener('DOMContentLoaded', function() {
       openEventSource();
     });
 });
+
+// ── Tab switching ─────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  var isAudit = tab === 'audit';
+  // Toggle tab button styles
+  document.getElementById('tab-compliance').classList.toggle('active', !isAudit);
+  document.getElementById('tab-audit').classList.toggle('active', isAudit);
+  // Toggle panels
+  document.getElementById('cards-section').style.display = isAudit ? 'none' : '';
+  document.getElementById('live-section').style.display  = isAudit ? 'none' : '';
+  document.getElementById('audit-panel').classList.toggle('visible', isAudit);
+  // Load audit trail when switching to it
+  if (isAudit) loadAuditTrail();
+}
+
+// ── Audit trail loader ────────────────────────────────────────────────────────
+function loadAuditTrail() {
+  fetch('/api/audit-trail')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var events = data.events || [];
+      var total  = data.total  || 0;
+      var empty  = document.getElementById('audit-empty');
+      var content = document.getElementById('audit-content');
+
+      if (events.length === 0) {
+        empty.style.display   = '';
+        content.style.display = 'none';
+        return;
+      }
+
+      empty.style.display   = 'none';
+      content.style.display = 'flex';
+
+      // Stats bar
+      var passed   = events.filter(function(e) { return e.audit_fast && e.audit_fast.passed; }).length;
+      var violated = events.length - passed;
+      var piiHits  = events.filter(function(e) { return e.audit_fast && e.audit_fast.scores && e.audit_fast.scores.pii_clean < 1; }).length;
+      var toxHits  = events.filter(function(e) { return e.audit_fast && e.audit_fast.scores && e.audit_fast.scores.toxicity_safe < 1; }).length;
+      document.getElementById('audit-stats-bar').innerHTML =
+        '<div class="audit-stat"><span class="audit-stat-label">Total</span><span class="audit-stat-value">' + total + '</span></div>' +
+        '<div class="audit-stat"><span class="audit-stat-label">Passed</span><span class="audit-stat-value" style="color:var(--green)">' + passed + '</span></div>' +
+        '<div class="audit-stat"><span class="audit-stat-label">Violations</span><span class="audit-stat-value" style="color:var(--red)">' + violated + '</span></div>' +
+        '<div class="audit-stat"><span class="audit-stat-label">PII hits</span><span class="audit-stat-value" style="color:var(--amber)">' + piiHits + '</span></div>' +
+        '<div class="audit-stat"><span class="audit-stat-label">Toxicity hits</span><span class="audit-stat-value" style="color:var(--amber)">' + toxHits + '</span></div>';
+
+      // Event list (newest first)
+      var list = document.getElementById('audit-events-list');
+      list.innerHTML = '';
+      var reversed = events.slice().reverse();
+      reversed.forEach(function(ev) {
+        var audit  = ev.audit_fast || {};
+        var scores = audit.scores  || {};
+        var viols  = audit.violations || {};
+        var passed = audit.passed;
+        var piiOk  = scores.pii_clean    === 1;
+        var toxOk  = scores.toxicity_safe === 1;
+        var faithScore = scores.faithfulness !== undefined ? Math.round(scores.faithfulness * 100) + '%' : 'N/A';
+
+        var violHtml = '';
+        var piiTypes = (viols.pii_types || []).join(', ');
+        var toxCats  = (viols.toxicity_categories || []).join(', ');
+        if (piiTypes || toxCats) {
+          violHtml = '<div class="audit-violations">' +
+            (piiTypes ? 'PII detected: ' + escHtml(piiTypes) + '  ' : '') +
+            (toxCats  ? 'Toxicity: '     + escHtml(toxCats)  : '') +
+          '</div>';
+        }
+
+        var card = document.createElement('div');
+        card.className = 'audit-event ' + (passed ? 'pass' : 'fail');
+        card.innerHTML =
+          '<div class="audit-event-header">' +
+            '<span class="audit-event-path">' + escHtml((ev.request && ev.request.query ? ev.request.query.slice(0,60) : ev.function || ev.target_url || '—')) + '</span>' +
+            '<span class="audit-event-ts">' + escHtml((ev.timestamp || '').slice(0,19).replace('T',' ')) + '</span>' +
+          '</div>' +
+          '<div class="audit-scores">' +
+            '<span class="audit-score-chip ' + (piiOk  ? 'ok' : 'warn') + '">PII '      + (piiOk  ? 'clean' : 'detected') + '</span>' +
+            '<span class="audit-score-chip ' + (toxOk  ? 'ok' : 'warn') + '">Toxicity ' + (toxOk  ? 'safe'  : 'flagged')  + '</span>' +
+            '<span class="audit-score-chip ok">Faithfulness ' + faithScore + '</span>' +
+            (ev.latency_ms ? '<span class="audit-score-chip ok">' + ev.latency_ms + 'ms</span>' : '') +
+          '</div>' +
+          violHtml;
+        list.appendChild(card);
+      });
+    })
+    .catch(function(err) {
+      console.error('Failed to load audit trail:', err);
+    });
+}
 </script>
 </body>
 </html>

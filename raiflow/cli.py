@@ -172,6 +172,41 @@ def generate_tests(policy, output_dir):
     click.echo(f"✅  Test files written to {output_dir}/")
 
 
+@cli.command("intercept")
+@click.option("--target", required=True, help="URL of the RAG app to proxy, e.g. http://localhost:7860")
+@click.option("--port", type=int, default=8080, show_default=True, help="Port for the interceptor proxy.")
+@click.option(
+    "--framework",
+    default="eu_ai_act",
+    show_default=True,
+    type=click.Choice(["eu_ai_act", "nist_ai_rmf"]),
+    help="Compliance framework to audit against.",
+)
+@click.option("--log", "log_path", default="raiflow_audit_trail.json", show_default=True, help="Path to write the audit trail JSON.")
+@click.option("--block-pii", is_flag=True, default=False, help="Block responses that contain PII (default: audit-only).")
+def intercept(target, port, framework, log_path, block_pii):
+    """Start a transparent HTTP proxy that audits every RAG API response in real-time.
+
+    Point your client at http://localhost:PORT instead of the target app.
+    Every request/response is checked for PII, toxicity, and faithfulness.
+    Results are streamed to the terminal and appended to the audit trail log.
+
+    \b
+    Examples:
+      raiflow intercept --target http://localhost:7860
+      raiflow intercept --target http://localhost:7860 --port 9090 --block-pii
+      raiflow intercept --target http://localhost:7860 --log audit.json
+    """
+    from raiflow.interceptor import run_interceptor
+    run_interceptor(
+        target=target,
+        port=port,
+        framework=framework,
+        log_path=log_path,
+        block_on_pii=block_pii,
+    )
+
+
 @cli.command("init")
 @click.option("--force", is_flag=True, default=False, help="Overwrite existing raiflow.yaml and rai-compliance.yml.")
 @click.option("--directory", default=".", show_default=True, help="Root directory to scan and write files into.")

@@ -45,6 +45,7 @@
         <a href="#cli-init">raiflow init</a>
         <a href="#cli-check">raiflow check</a>
         <a href="#cli-generate-tests">raiflow generate-tests</a>
+        <a href="#cli-intercept">raiflow intercept</a>
       </div>
       <div class="sidebar-section">
         <div class="sidebar-section-title">Compliance Checks</div>
@@ -225,6 +226,55 @@ banned_models: []</pre></div>
           <div class="code-titlebar"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
           <div class="code-body"><pre><span class="cmd">raiflow</span> <span class="keyword">generate-tests</span>
 <span class="cmd">raiflow</span> <span class="keyword">generate-tests</span> <span class="flag">--output-dir</span> tests/compliance</pre></div>
+        </div>
+      </div>
+
+      <!-- CLI: intercept -->
+      <div class="docs-section" id="cli-intercept">
+        <h2>raiflow intercept</h2>
+        <p>Starts a transparent HTTP proxy that sits in front of your RAG API and audits every request/response in real-time &mdash; without touching your application code. This is the <strong>runtime enforcement layer</strong>: while <code class="inline-code">raiflow check</code> gates your pipeline before deployment, <code class="inline-code">raiflow intercept</code> watches what your system actually produces while it runs.</p>
+        <p>Every response is checked for PII leakage, toxicity, and faithfulness. Results are streamed to the terminal and appended to an audit trail JSON file. The <strong>Audit Trail</strong> tab in the live dashboard reads this file and visualises the events.</p>
+        <div class="code-window" style="margin:1.5rem 0">
+          <div class="code-titlebar"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span><span class="code-filename">terminal</span></div>
+          <div class="code-body"><pre><span class="comment"># Basic usage — proxy your RAG app on port 8080</span>
+<span class="cmd">raiflow</span> <span class="keyword">intercept</span> <span class="flag">--target</span> http://localhost:7860
+
+<span class="comment"># Custom proxy port</span>
+<span class="cmd">raiflow</span> <span class="keyword">intercept</span> <span class="flag">--target</span> http://localhost:7860 <span class="flag">--port</span> 9090
+
+<span class="comment"># Block responses that contain PII (default is audit-only)</span>
+<span class="cmd">raiflow</span> <span class="keyword">intercept</span> <span class="flag">--target</span> http://localhost:7860 <span class="flag">--block-pii</span>
+
+<span class="comment"># Custom audit log path</span>
+<span class="cmd">raiflow</span> <span class="keyword">intercept</span> <span class="flag">--target</span> http://localhost:7860 <span class="flag">--log</span> audit.json</pre></div>
+        </div>
+        <div class="callout callout-info">
+          <strong>How it works:</strong> Point your client at <code class="inline-code">http://localhost:8080</code> instead of your RAG app directly. The interceptor forwards every request transparently, captures the response, runs compliance checks in under 1ms, and returns the original response unmodified (unless <code class="inline-code">--block-pii</code> is set and PII is detected).
+        </div>
+        <h3>What gets checked</h3>
+        <table class="checks-table" style="margin-top:1rem">
+          <thead><tr><th>Check</th><th>What it detects</th><th>Latency</th></tr></thead>
+          <tbody>
+            <tr><td><strong>PII Detection</strong></td><td style="color:var(--text-muted)">Email, phone, SSN, credit card, IP address, API keys, passport numbers</td><td style="color:var(--text-muted)">&lt;1ms</td></tr>
+            <tr><td><strong>Toxicity</strong></td><td style="color:var(--text-muted)">Harmful, offensive, or unsafe language in responses</td><td style="color:var(--text-muted)">&lt;1ms</td></tr>
+            <tr><td><strong>Faithfulness</strong></td><td style="color:var(--text-muted)">Whether the answer is grounded in the retrieved context (hallucination proxy)</td><td style="color:var(--text-muted)">&lt;1ms</td></tr>
+          </tbody>
+        </table>
+        <h3>Options</h3>
+        <table class="checks-table" style="margin-top:1rem">
+          <thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code class="inline-code">--target</code></td><td><em>required</em></td><td style="color:var(--text-muted)">URL of the RAG app to proxy, e.g. <code class="inline-code">http://localhost:7860</code></td></tr>
+            <tr><td><code class="inline-code">--port</code></td><td><code class="inline-code">8080</code></td><td style="color:var(--text-muted)">Port the interceptor proxy listens on</td></tr>
+            <tr><td><code class="inline-code">--framework</code></td><td><code class="inline-code">eu_ai_act</code></td><td style="color:var(--text-muted)">Compliance framework to audit against</td></tr>
+            <tr><td><code class="inline-code">--log</code></td><td><code class="inline-code">raiflow_audit_trail.json</code></td><td style="color:var(--text-muted)">Path to write the audit trail JSON</td></tr>
+            <tr><td><code class="inline-code">--block-pii</code></td><td><code class="inline-code">false</code></td><td style="color:var(--text-muted)">Block responses containing PII with HTTP 403 (default: audit-only)</td></tr>
+          </tbody>
+        </table>
+        <h3>Audit trail &amp; dashboard</h3>
+        <p>Every intercepted request is appended to <code class="inline-code">raiflow_audit_trail.json</code>. Open the live dashboard (<code class="inline-code">raiflow check --stage ci</code>) and click the <strong>Audit Trail</strong> tab to browse events, see PII/toxicity hit counts, and inspect individual request details.</p>
+        <div class="callout callout-warning">
+          <strong>Enforcement modes:</strong> By default the interceptor is <em>audit-only</em> &mdash; it logs violations but passes responses through unchanged. Add <code class="inline-code">--block-pii</code> to return HTTP 403 with a violation report instead of the original response when PII is detected.
         </div>
       </div>
 
