@@ -153,8 +153,8 @@ nav { display: flex; justify-content: space-between; align-items: center; }
 }
 
 /* ── Banner blend ────────────────────────────────────────────────── */
-/* The PNG has a solid #0d1117 background so we use mix-blend-mode  */
-/* to strip the box and let only the bright logo pixels show.       */
+/* The PNG has a solid background so we fade edges with a mask      */
+/* and use mix-blend-mode to dissolve the remaining dark box.       */
 .hero-logo-wrap {
   position: relative;
   display: inline-block;
@@ -164,9 +164,19 @@ nav { display: flex; justify-content: space-between; align-items: center; }
 .hero-logo {
   max-width: 320px;
   display: block;
-  /* lighten strips the dark background; only bright pixels survive */
+  /* Fade all four edges to transparent */
+  -webkit-mask-image: radial-gradient(
+    ellipse 85% 75% at 50% 50%,
+    black 40%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 85% 75% at 50% 50%,
+    black 40%,
+    transparent 100%
+  );
+  /* After masking, lighten blend dissolves any remaining background */
   mix-blend-mode: lighten;
-  /* slight green tint to unify with theme */
   filter:
     drop-shadow(0 0 28px rgba(74,124,89,0.5))
     drop-shadow(0 0 8px rgba(200,168,75,0.25))
